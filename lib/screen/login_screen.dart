@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            'Username or Email',
+                            'Email',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14.0),
                           ),
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: emailCont,
                             validator: (value) {
                               if (value.isEmpty) {
-                                return "Please Enter Username or Email";
+                                return "Please Enter Email";
                               }
                               return null;
                             },
