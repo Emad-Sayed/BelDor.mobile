@@ -1,6 +1,7 @@
 import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/screen/login_screen.dart';
+import 'package:bel_dor/utils/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -75,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 16.0,
                   ),
                   Text(
-                    'Getting Started',
+                    AppLocalizations.of(context).signUpTitle,
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                   ),
@@ -83,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 8.0,
                   ),
                   Text(
-                    'Create a new account',
+                    AppLocalizations.of(context).signUpSubtitle,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14.0,
@@ -117,7 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: <Widget>[
                           //username
                           Text(
-                            'Username',
+                            AppLocalizations.of(context).username,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14.0),
                           ),
@@ -126,7 +127,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             controller: usernameCont,
                             validator: (value) {
                               if (value.isEmpty) {
-                                return "Please Enter Username";
+                                return AppLocalizations.of(context)
+                                    .enterValidUsername;
                               }
                               return null;
                             },
@@ -152,7 +154,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                           //Email
                           Text(
-                            'Email',
+                            AppLocalizations.of(context).email,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14.0),
                           ),
@@ -161,7 +163,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             key: emailKey,
                             validator: (value) {
                               if (value.isEmpty) {
-                                return "Please Enter Email";
+                                return AppLocalizations.of(context)
+                                    .enterValidEmail;
                               }
                               return null;
                             },
@@ -187,7 +190,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                           //Phone 1
                           Text(
-                            'Phone',
+                            AppLocalizations.of(context).phone,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14.0),
                           ),
@@ -195,7 +198,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             key: phoneKey,
                             controller: phoneNumberCont,
                             validator: (value) {
-                              if (value.isEmpty) return "Please Enter Phone";
+                              if (value.isEmpty)
+                                return AppLocalizations.of(context)
+                                    .enterValidPhone;
                               return null;
                             },
                             decoration: InputDecoration(
@@ -219,7 +224,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
 
                           //password
-                          Text('Password',
+                          Text(AppLocalizations.of(context).password,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14.0)),
                           TextFormField(
@@ -231,10 +236,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   " + " +
                                   confirmPasswordCont.text.toString());
                               if (value.isEmpty)
-                                return "Please Enter Password";
+                                return AppLocalizations.of(context)
+                                    .enterValidPassword;
                               else if (value !=
                                   confirmPasswordCont.text.toString())
-                                return "passwords are not identical";
+                                return AppLocalizations.of(context)
+                                    .passwordsNotIdentical;
                               return null;
                             },
                             decoration: InputDecoration(
@@ -270,7 +277,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
 
                           //confirm password
-                          Text('Confirm Password',
+                          Text(AppLocalizations.of(context).confirmPassword,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14.0)),
                           TextFormField(
@@ -281,9 +288,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               print(
                                   value + " + " + passwordCont.text.toString());
                               if (value.isEmpty)
-                                return "Please Enter Confirmation Password";
+                                return AppLocalizations.of(context)
+                                    .enterValidConfirmPassword;
                               else if (value != passwordCont.text.toString())
-                                return "passwords are not identical";
+                                return AppLocalizations.of(context)
+                                    .passwordsNotIdentical;
                               return null;
                             },
                             decoration: InputDecoration(
@@ -325,10 +334,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     activeColor: Colors.white,
                     checkColor: Colors.black,
                     value: termsAccepted,
-                    title: Text('By Creating an account, you agree to our',
+                    title: Text(AppLocalizations.of(context).conditionTitle,
                         style: TextStyle(fontSize: 14.0)),
                     subtitle: Text(
-                      'Terms and Conditions',
+                      AppLocalizations.of(context).termsAndConditions,
                       style:
                           TextStyle(fontSize: 14.0, color: Colors.blueAccent),
                     ),
@@ -352,6 +361,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onTap: () {
                             setState(() {
                               errorText = "";
+                              showError = false;
                             });
                             if (usernameKey.currentState.validate() &&
                                 emailKey.currentState.validate() &&
@@ -388,7 +398,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               });
                             } else if (!termsAccepted) {
                               setState(() {
-                                errorText = "Please accept our terms";
+                                errorText = AppLocalizations.of(context)
+                                    .termsAndConditionValidation;
                                 showError = true;
                               });
                             }
@@ -403,7 +414,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             margin: EdgeInsets.symmetric(horizontal: 16.0),
                             padding: EdgeInsets.all(16.0),
                             child: Text(
-                              'Sign Up',
+                              AppLocalizations.of(context).signUp,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16.0,
@@ -420,13 +431,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Have an Account',
+                        AppLocalizations.of(context).haveAnAccount,
                       ),
                       Container(
                         child: InkWell(
                             child: Padding(
                               padding: EdgeInsets.all(16.0),
-                              child: Text('Sign In',
+                              child: Text(AppLocalizations.of(context).signIn,
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       color: Colors.blue,

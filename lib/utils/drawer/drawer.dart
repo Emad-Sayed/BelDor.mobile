@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bel_dor/main.dart';
+import 'package:bel_dor/screen/branches_screen.dart';
 import 'package:bel_dor/screen/home_page_screen.dart';
 import 'package:bel_dor/screen/login_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -87,8 +88,29 @@ class _MyDrawerState extends State<MyDrawer> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
                 child: Text(
-                  user != null ? user.username : "Welcome",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
+                  user != null
+                      ? user.username
+                      : AppLocalizations.of(context).welcome,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 2.0, right: 8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).yourCode,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    Text(
+                      "100",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16.0),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -102,15 +124,19 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     final List<DrawerModel> _drawerData = [
       DrawerModel(
-          drawerTitle: "Home",
+          drawerTitle: AppLocalizations.of(context).home,
           drawerIcon: Icons.home,
           navigateTo: MyHomePage()),
       DrawerModel(
-          drawerTitle: "Login",
+          drawerTitle: AppLocalizations.of(context).login,
           drawerIcon: Icons.chevron_right,
           navigateTo: LoginScreen()),
       DrawerModel(
-          drawerTitle: "Logout",
+          drawerTitle: AppLocalizations.of(context).branches,
+          drawerIcon: Icons.category,
+          navigateTo: BranchesScreen()),
+      DrawerModel(
+          drawerTitle: AppLocalizations.of(context).logout,
           drawerIcon: Icons.chevron_left,
           navigateTo: null),
     ];
@@ -123,30 +149,7 @@ class _MyDrawerState extends State<MyDrawer> {
         // Important: Remove any padding from the ListView.
         children: <Widget>[
           DrawerHeader(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: _getHeader(),
-                  flex: 4,
-                ),
-                Visibility(
-                  visible:
-                      PreferenceUtils.getBool(SharedFields.IS_LOGGED_IN, false),
-                  child: Expanded(
-                    child: InkWell(
-                      child: Icon(
-                        Icons.settings,
-                        size: 30,
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                )
-              ],
-            ),
+            child: _getHeader(),
             decoration: BoxDecoration(
               color: Colors.black54,
             ),

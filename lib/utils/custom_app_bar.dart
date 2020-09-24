@@ -18,7 +18,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(
             Icons.search,
             size: 40,
-            color: Colors.white,
+            color: Color(0xffCBEEF3),
           ),
           onPressed: () => {},
         )
@@ -28,7 +28,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: Icon(
           Icons.menu,
           size: 40,
-          color: Colors.white,
+          color: Color(0xffCBEEF3),
         ),
         // change this size and style
         onPressed: () => mainKey.currentState.openDrawer(),
@@ -37,7 +37,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         AppLocalizations.of(context).title,
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),
+            color: Color(0xffCBEEF3), fontSize: 30.0, fontWeight: FontWeight.bold),
       ),
       automaticallyImplyLeading: false,
       elevation: 8.0,

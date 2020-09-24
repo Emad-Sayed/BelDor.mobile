@@ -2,6 +2,7 @@ import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/screen/home_page_screen.dart';
 import 'package:bel_dor/screen/signup_screen.dart';
+import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
 import 'package:flutter/cupertino.dart';
@@ -67,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 16.0,
                   ),
                   Text(
-                    'Let\'s Sign You In',
+                    AppLocalizations.of(context).loginTitle,
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                   ),
@@ -75,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 8.0,
                   ),
                   Text(
-                    'Welcome Back, you\'ve been missed',
+                    AppLocalizations.of(context).loginSubtitle,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14.0,
@@ -108,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            'Email',
+                            AppLocalizations.of(context).email,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14.0),
                           ),
@@ -117,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: emailCont,
                             validator: (value) {
                               if (value.isEmpty) {
-                                return "Please Enter Email";
+                                return AppLocalizations.of(context).enterValidEmail;
                               }
                               return null;
                             },
@@ -140,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: 16.0,
                           ),
-                          Text('Password',
+                          Text(AppLocalizations.of(context).password,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14.0)),
                           TextFormField(
@@ -149,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             key: passwordKey,
                             validator: (value) {
                               if (value.isEmpty) {
-                                return "Please Enter password";
+                                return AppLocalizations.of(context).enterValidPassword;
                               }
                               return null;
                             },
@@ -190,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   right: 8.0,
                                   bottom: 8.0),
                               child: Text(
-                                'Forgot Password ?',
+                                AppLocalizations.of(context).forgetPassword,
                                 style: TextStyle(fontSize: 14.0),
                                 textAlign: TextAlign.end,
                               ),
@@ -207,10 +208,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     activeColor: Colors.white,
                     checkColor: Colors.black,
                     value: termsAccepted,
-                    title: Text('By Creating an account, you agree to our',
+                    title: Text(AppLocalizations.of(context).conditionTitle,
                         style: TextStyle(fontSize: 14.0)),
                     subtitle: Text(
-                      'Terms and Conditions',
+                      AppLocalizations.of(context).termsAndConditions,
                       style:
                           TextStyle(fontSize: 14.0, color: Colors.blueAccent),
                     ),
@@ -234,6 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {
                             setState(() {
                               errorText = "";
+                              showError = false;
                             });
                             if (emailKey.currentState.validate() &&
                                 passwordKey.currentState.validate() &&
@@ -262,7 +264,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   mainKey.currentState.showSnackBar(SnackBar(
                                     content: Text(
                                       (result as ErrorState).msg.message,
-                                      style: TextStyle(fontFamily: 'Helvetica'),
                                     ),
                                     duration: Duration(seconds: 3),
                                   ));
@@ -273,7 +274,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             } else if (!termsAccepted) {
                               setState(() {
-                                errorText = "Please accept our terms";
+                                errorText = AppLocalizations.of(context).termsAndConditionValidation;
                                 showError = true;
                               });
                             }
@@ -288,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             margin: EdgeInsets.symmetric(horizontal: 16.0),
                             padding: EdgeInsets.all(16.0),
                             child: Text(
-                              'Sign In',
+                              AppLocalizations.of(context).signIn,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16.0,
@@ -305,13 +306,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Don\'t have an account ?',
+                        AppLocalizations.of(context).dontHaveAccount,
                       ),
                       Container(
                         child: InkWell(
                             child: Padding(
                               padding: EdgeInsets.all(16.0),
-                              child: Text('Sign Up',
+                              child: Text(AppLocalizations.of(context).signUp,
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       color: Colors.blue,
