@@ -53,20 +53,20 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   // Define the default brightness and colors.
-//                    primaryColor: Colors.orange[400],
-//                    accentColor: Colors.orangeAccent,
-//                    primaryColorDark: Colors.orange[600],
-//                    bottomSheetTheme: BottomSheetThemeData(
-//                        backgroundColor: Colors.transparent)
+                  primaryColor: Color(0xff06DAB0),
+                  accentColor: Color(0xffCBEEF3),
+                  primaryColorDark: Color(0xff181C1A),
                 ),
-                // Watch out: MaterialApp creates a Localizations widget
-                // with the specified delegates. DemoLocalizations.of()
-                // will only find the app's Localizations widget if its
-                // context is a child of the app.
                 home: SplashScreen(),
               ));
         } else
-          return Container(color: Theme.of(context).primaryColor);
+          return Container(
+            decoration: BoxDecoration(
+                color: Color(0xff26362E),
+                image: DecorationImage(
+                    image: AssetImage("assets/images/pattern.png"),
+                    fit: BoxFit.fitHeight)),
+          );
       },
     );
   }

@@ -34,23 +34,25 @@ class TicketDetails {
       this.branchDepartementId,
       this.currentNumber});
 
-  TicketDetails.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    createTime = json['createTime'];
-    ticketNumber = json['ticketNumber'];
-    visitorId = json['visitorId'];
-    visitorName = json['visitorName'];
-    statusId = json['statusId'];
-    statusNameAR = json['statusNameAR'];
-    statusNameEN = json['statusNameEN'];
-    branchId = json['branchId'];
-    branchNameAR = json['branchNameAR'];
-    branchNameEN = json['branchNameEN'];
-    departementId = json['departementId'];
-    departementNameAR = json['departementNameAR'];
-    departementNameEN = json['departementNameEN'];
-    branchDepartementId = json['branchDepartementId'];
-    currentNumber = json['currentNumber'];
+  fromJson(Map<String, dynamic> json) {
+    return TicketDetails(
+      id: json['id'],
+      createTime: json['createTime'],
+      ticketNumber: json['ticketNumber'],
+      visitorId: json['visitorId'],
+      visitorName: json['visitorName'],
+      statusId: json['statusId'],
+      statusNameAR: json['statusNameAR'],
+      statusNameEN: json['statusNameEN'],
+      branchId: json['branchId'],
+      branchNameAR: json['branchNameAR'],
+      branchNameEN: json['branchNameEN'],
+      departementId: json['departementId'],
+      departementNameAR: json['departementNameAR'],
+      departementNameEN: json['departementNameEN'],
+      branchDepartementId: json['branchDepartementId'],
+      currentNumber: json['currentNumber'],
+    );
   }
 
   Map<String, dynamic> toJson() {

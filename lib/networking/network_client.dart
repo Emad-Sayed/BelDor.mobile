@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bel_dor/models/api_response_list.dart';
+import 'package:bel_dor/models/branch_details.dart';
+import 'package:bel_dor/models/department_response.dart';
 import 'package:bel_dor/models/general_response.dart';
 import 'package:bel_dor/models/login_success_response.dart';
 import 'package:bel_dor/models/register_response.dart';
+import 'package:bel_dor/models/ticket_details.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,10 +18,10 @@ class NetworkClient {
 
   Future<http.Response> request(
       {@required RequestType requestType,
-        @required String path,
-        dynamic parameter,
-        dynamic queryParameters,
-        Map<String, String> authHeader}) async {
+      @required String path,
+      dynamic parameter,
+      dynamic queryParameters,
+      Map<String, String> authHeader}) async {
     print("\n$queryParameters\n");
     var header = {
       "Content-Type": "application/json",
@@ -96,13 +100,14 @@ class NetworkClient {
     }
   }
 
-  Future<Result> getTickets({String token,
-    String specificDay,
-    List<String> statusIds,
-    List<String> branchIds,
-    List<String> departmentIds,
-    String pageNumber,
-    String pageSize}) async {
+  Future<Result> getTickets(
+      {String token,
+      String specificDay,
+      List<String> statusIds,
+      List<String> branchIds,
+      List<String> departmentIds,
+      String pageNumber,
+      String pageSize}) async {
     try {
       final response = await request(
           requestType: RequestType.GET,
@@ -119,16 +124,87 @@ class NetworkClient {
             'Authorization': 'Bearer $token',
           });
       print(response.body);
-//      if (response.statusCode == 200) {
-//        return Result<LoginSuccessResponse>.success(
-//            LoginSuccessResponse.fromJson(json.decode(response.body)),
-//            response.statusCode);
-//      } else if (response.statusCode == 401) {
-//        return Result.error(
-//            GeneralResponse(message: "email or password incorrect"));
-//      } else {
-//        return Result.error(GeneralResponse(message: "Server error"));
-//      }
+      if (response.statusCode == 200) {
+        return Result<ApiResponseList<TicketDetails>>.success(
+            ApiResponseList.fromJson(json.decode(response.body)),
+            response.statusCode);
+      } else {
+        return Result.error(GeneralResponse(message: "Server error"));
+      }
+    } catch (error) {
+      print("ERROR $error");
+      return Result.error(GeneralResponse(message: "Code error"));
+    }
+  }
+
+  Future<Result> getBranches(
+      {String pageNumber, String pageSize, String searchKeyword}) async {
+    try {
+      final response = await request(
+          requestType: RequestType.GET,
+          path: "Branch",
+          queryParameters: {
+            "keyWord": searchKeyword,
+            "pageNumber": pageNumber,
+            "pageSize": pageSize
+          });
+      print(response.body);
+      if (response.statusCode == 200) {
+        return Result<ApiResponseList<BranchDetails>>.success(
+            ApiResponseList.fromJson(json.decode(response.body)),
+            response.statusCode);
+      } else {
+        return Result.error(GeneralResponse(message: "Server error"));
+      }
+    } catch (error) {
+      print("ERROR $error");
+      return Result.error(GeneralResponse(message: "Code error"));
+    }
+  }
+
+  Future<Result> getDepartments({String branchId}) async {
+    try {
+      final response =
+          await request(requestType: RequestType.GET, path: "Branch/$branchId");
+      print(response.body);
+      if (response.statusCode == 200) {
+        return Result<ApiResponseList<DepartmentResponse>>.success(
+            ApiResponseList.fromJson(json.decode(response.body)),
+            response.statusCode);
+      } else {
+        return Result.error(GeneralResponse(message: "Server error"));
+      }
+    } catch (error) {
+      print("ERROR $error");
+      return Result.error(GeneralResponse(message: "Code error"));
+    }
+  }
+
+  Future<Result> addTicket(
+      {int branchId, int departmentId, String token}) async {
+    try {
+      final response = await request(
+          requestType: RequestType.POST,
+          path: "Ticket",
+          parameter: {
+            "branchId": branchId,
+            "departementId": departmentId
+          },
+          authHeader: {
+            'Authorization': 'Bearer $token',
+          });
+      print(response.body);
+      if (response.statusCode == 200) {
+        return Result<ApiResponseList<TicketDetails>>.success(
+            ApiResponseList.fromJson(json.decode(response.body)),
+            response.statusCode);
+      } else if (response.statusCode == 400) {
+        return Result<ApiResponseList<TicketDetails>>.success(
+            ApiResponseList.fromJson(json.decode(response.body)),
+            response.statusCode);
+      } else {
+        return Result.error(GeneralResponse(message: "Server error"));
+      }
     } catch (error) {
       print("ERROR $error");
       return Result.error(GeneralResponse(message: "Code error"));
