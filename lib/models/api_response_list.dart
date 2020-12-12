@@ -1,5 +1,6 @@
 import 'package:bel_dor/models/branch_details.dart';
 import 'package:bel_dor/models/department_response.dart';
+import 'package:bel_dor/models/departments.dart';
 import 'package:bel_dor/models/ticket_details.dart';
 
 class ApiResponseList<T> {
@@ -44,6 +45,10 @@ class ApiResponseList<T> {
       } else if (T == DepartmentResponse) {
         json['data'].forEach((v) {
           data.add(DepartmentResponse().fromJson(v));
+        });
+      } else if (T == Departments) {
+        json['data'].forEach((v) {
+          data.add(Departments().fromJson(v));
         });
       }
     }

@@ -1,4 +1,4 @@
-class BranchDetails {
+class Departments {
   int id;
   String nameAR;
   String nameEN;
@@ -6,11 +6,11 @@ class BranchDetails {
   String createdName;
   bool isSelected = false;
 
-  BranchDetails(
+  Departments(
       {this.id, this.nameAR, this.nameEN, this.createdyId, this.createdName});
 
   fromJson(Map<String, dynamic> json) {
-    return BranchDetails(
+    return Departments(
       id: json['id'],
       nameAR: json['nameAR'],
       nameEN: json['nameEN'],

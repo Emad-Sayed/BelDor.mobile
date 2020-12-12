@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bel_dor/models/api_response_list.dart';
+import 'package:bel_dor/models/api_response_object.dart';
 import 'package:bel_dor/models/branch_details.dart';
 import 'package:bel_dor/models/department_response.dart';
+import 'package:bel_dor/models/departments.dart';
 import 'package:bel_dor/models/general_response.dart';
 import 'package:bel_dor/models/login_success_response.dart';
 import 'package:bel_dor/models/register_response.dart';
@@ -82,7 +84,11 @@ class NetworkClient {
       final response = await request(
           requestType: RequestType.POST,
           path: "Auth",
-          parameter: {"userName": username, "password": password});
+          parameter: {
+            "userName": username,
+            "password": password,
+            "rememberMe": true
+          });
       print(response.body);
       if (response.statusCode == 200) {
         return Result<LoginSuccessResponse>.success(
@@ -162,13 +168,38 @@ class NetworkClient {
     }
   }
 
-  Future<Result> getDepartments({String branchId}) async {
+  Future<Result> getBranchDepartments({String branchId}) async {
     try {
       final response =
           await request(requestType: RequestType.GET, path: "Branch/$branchId");
       print(response.body);
       if (response.statusCode == 200) {
         return Result<ApiResponseList<DepartmentResponse>>.success(
+            ApiResponseList.fromJson(json.decode(response.body)),
+            response.statusCode);
+      } else {
+        return Result.error(GeneralResponse(message: "Server error"));
+      }
+    } catch (error) {
+      print("ERROR $error");
+      return Result.error(GeneralResponse(message: "Code error"));
+    }
+  }
+
+  Future<Result> getDepartments(
+      {String pageNumber, String pageSize, String searchKeyword}) async {
+    try {
+      final response = await request(
+          requestType: RequestType.GET,
+          path: "Departement",
+          queryParameters: {
+            "keyWord": searchKeyword,
+            "pageNumber": pageNumber,
+            "pageSize": pageSize
+          });
+      print(response.body);
+      if (response.statusCode == 200) {
+        return Result<ApiResponseList<Departments>>.success(
             ApiResponseList.fromJson(json.decode(response.body)),
             response.statusCode);
       } else {
@@ -201,6 +232,26 @@ class NetworkClient {
       } else if (response.statusCode == 400) {
         return Result<ApiResponseList<TicketDetails>>.success(
             ApiResponseList.fromJson(json.decode(response.body)),
+            response.statusCode);
+      } else {
+        return Result.error(GeneralResponse(message: "Server error"));
+      }
+    } catch (error) {
+      print("ERROR $error");
+      return Result.error(GeneralResponse(message: "Code error"));
+    }
+  }
+
+  Future<Result> getClosedTicketInfo({int ticketId}) async {
+    try {
+      final response = await request(
+          requestType: RequestType.GET,
+          path: "Ticket/ClosedTicketInfo",
+          queryParameters: {'id': ticketId.toString()});
+      print(response.body);
+      if (response.statusCode == 200) {
+        return Result<ApiResponseObject<TicketDetails>>.success(
+            ApiResponseObject.fromJson(json.decode(response.body)),
             response.statusCode);
       } else {
         return Result.error(GeneralResponse(message: "Server error"));

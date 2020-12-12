@@ -67,7 +67,10 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
     return Scaffold(
       key: mainKey,
       drawer: MyDrawer(2),
-      appBar: MyCustomAppBar(mainKey: mainKey),
+      appBar: MyCustomAppBar(
+        mainKey: mainKey,
+        showSearch: false,
+      ),
       body: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(

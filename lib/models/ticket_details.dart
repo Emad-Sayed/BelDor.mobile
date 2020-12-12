@@ -15,6 +15,8 @@ class TicketDetails {
   String departementNameEN;
   int branchDepartementId;
   int currentNumber;
+  String employeeName;
+  String information;
 
   TicketDetails(
       {this.id,
@@ -32,27 +34,30 @@ class TicketDetails {
       this.departementNameAR,
       this.departementNameEN,
       this.branchDepartementId,
-      this.currentNumber});
+      this.currentNumber,
+      this.employeeName,
+      this.information});
 
   fromJson(Map<String, dynamic> json) {
     return TicketDetails(
-      id: json['id'],
-      createTime: json['createTime'],
-      ticketNumber: json['ticketNumber'],
-      visitorId: json['visitorId'],
-      visitorName: json['visitorName'],
-      statusId: json['statusId'],
-      statusNameAR: json['statusNameAR'],
-      statusNameEN: json['statusNameEN'],
-      branchId: json['branchId'],
-      branchNameAR: json['branchNameAR'],
-      branchNameEN: json['branchNameEN'],
-      departementId: json['departementId'],
-      departementNameAR: json['departementNameAR'],
-      departementNameEN: json['departementNameEN'],
-      branchDepartementId: json['branchDepartementId'],
-      currentNumber: json['currentNumber'],
-    );
+        id: json['id'],
+        createTime: json['createTime'],
+        ticketNumber: json['ticketNumber'],
+        visitorId: json['visitorId'],
+        visitorName: json['visitorName'],
+        statusId: json['statusId'],
+        statusNameAR: json['statusNameAR'],
+        statusNameEN: json['statusNameEN'],
+        branchId: json['branchId'],
+        branchNameAR: json['branchNameAR'],
+        branchNameEN: json['branchNameEN'],
+        departementId: json['departementId'],
+        departementNameAR: json['departementNameAR'],
+        departementNameEN: json['departementNameEN'],
+        branchDepartementId: json['branchDepartementId'],
+        currentNumber: json['currentNumber'],
+        employeeName: json['employeeName'],
+        information: json['information']);
   }
 
   Map<String, dynamic> toJson() {
@@ -73,6 +78,8 @@ class TicketDetails {
     data['departementNameEN'] = this.departementNameEN;
     data['branchDepartementId'] = this.branchDepartementId;
     data['currentNumber'] = this.currentNumber;
+    data['employeeName'] = this.employeeName;
+    data['information'] = this.information;
     return data;
   }
 }

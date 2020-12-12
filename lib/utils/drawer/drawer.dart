@@ -4,11 +4,13 @@ import 'package:bel_dor/main.dart';
 import 'package:bel_dor/screen/branches_screen.dart';
 import 'package:bel_dor/screen/home_page_screen.dart';
 import 'package:bel_dor/screen/login_screen.dart';
+import 'package:bel_dor/screen/tickets_history_filter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../app_localization.dart';
 import '../preference_utils.dart';
@@ -52,7 +54,9 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Widget _getHeader() {
-    var user = null;
+    var user =
+        JwtDecoder.decode(PreferenceUtils.getString(SharedFields.TOKEN, ""));
+    ;
     return Row(
       children: [
         user != null
@@ -61,16 +65,12 @@ class _MyDrawerState extends State<MyDrawer> {
                   height: 80.0,
                   width: 80.0,
                   fit: BoxFit.fitWidth,
-                  imageUrl: user.photos.isNotEmpty
-                      ? 'https://tradify.app/${user.photos.firstWhere((element) => element.isMain).thumb}'
-                      : "",
+                  imageUrl: "",
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(
                           value: downloadProgress.progress),
                   errorWidget: (context, url, error) => CircleAvatar(
-                    backgroundImage: user.photos.isEmpty
-                        ? AssetImage('assets/images/appImages/profile.png')
-                        : AssetImage('assets/images/appImages/errorImage.png'),
+                    backgroundImage: AssetImage('assets/images/profile.png'),
                     radius: 40,
                   ),
                 ),
@@ -89,8 +89,10 @@ class _MyDrawerState extends State<MyDrawer> {
                 padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
                 child: Text(
                   user != null
-                      ? user.username
-                      : AppLocalizations.of(context).welcome,
+                      ? user['Name']
+                      : AppLocalizations
+                      .of(context)
+                      .welcome,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                 ),
               ),
@@ -106,7 +108,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       width: 5.0,
                     ),
                     Text(
-                      "100",
+                      user["Id"],
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.0),
                     ),
@@ -128,15 +130,27 @@ class _MyDrawerState extends State<MyDrawer> {
           drawerIcon: Icons.home,
           navigateTo: MyHomePage()),
       DrawerModel(
-          drawerTitle: AppLocalizations.of(context).login,
+          drawerTitle: AppLocalizations
+              .of(context)
+              .login,
           drawerIcon: Icons.chevron_right,
           navigateTo: LoginScreen()),
       DrawerModel(
-          drawerTitle: AppLocalizations.of(context).branches,
+          drawerTitle: AppLocalizations
+              .of(context)
+              .branches,
           drawerIcon: Icons.category,
           navigateTo: BranchesScreen()),
       DrawerModel(
-          drawerTitle: AppLocalizations.of(context).logout,
+          drawerTitle: AppLocalizations
+              .of(context)
+              .ticketsHistory,
+          drawerIcon: Icons.history,
+          navigateTo: TicketsHistoryFilter()),
+      DrawerModel(
+          drawerTitle: AppLocalizations
+              .of(context)
+              .logout,
           drawerIcon: Icons.chevron_left,
           navigateTo: null),
     ];

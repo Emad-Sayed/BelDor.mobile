@@ -248,7 +248,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       username: emailCont.text.toString(),
                                       password: passwordCont.text.toString())
                                   .then((result) {
-                                if (result is SuccessState) {
+                                if (result is SuccessState &&
+                                    result.value.roles[0] == "VISITOR") {
                                   PreferenceUtils.setString(
                                       SharedFields.TOKEN, result.value.token);
 
@@ -260,6 +261,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                         builder: (BuildContext context) =>
                                             MyHomePage()),
                                   );
+                                } else if (result is SuccessState) {
+                                  mainKey.currentState.showSnackBar(SnackBar(
+                                    content: Text(
+                                      (result as ErrorState).msg.message,
+                                    ),
+                                    duration: Duration(seconds: 3),
+                                  ));
                                 } else {
                                   mainKey.currentState.showSnackBar(SnackBar(
                                     content: Text(

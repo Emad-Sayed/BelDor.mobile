@@ -23,7 +23,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   @override
   void initState() {
     NetworkClient()
-        .getDepartments(
+        .getBranchDepartments(
       branchId: widget.branchId.toString(),
     )
         .then((result) {
@@ -49,7 +49,10 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
     return Scaffold(
       key: mainKey,
       drawer: MyDrawer(2),
-      appBar: MyCustomAppBar(mainKey: mainKey),
+      appBar: MyCustomAppBar(
+        mainKey: mainKey,
+        showSearch: false,
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

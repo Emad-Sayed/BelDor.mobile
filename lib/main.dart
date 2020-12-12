@@ -54,6 +54,7 @@ class _MyAppState extends State<MyApp> {
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   // Define the default brightness and colors.
                   primaryColor: Color(0xff06DAB0),
+                  unselectedWidgetColor: Color(0xff06DAB0),
                   accentColor: Color(0xffCBEEF3),
                   primaryColorDark: Color(0xff181C1A),
                 ),

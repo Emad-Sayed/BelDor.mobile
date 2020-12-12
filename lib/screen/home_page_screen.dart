@@ -12,6 +12,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -26,6 +27,8 @@ class _MyHomePageState extends State<MyHomePage>
   List<TicketDetails> waitingTickets;
   List<TicketDetails> missedTickets;
   TabController _tabController;
+  final PanelController _pc = new PanelController();
+  TicketDetails singleTicket;
 
   @override
   void initState() {
@@ -39,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage>
             statusIds: ["1", "3", "4"],
             specificDay: "",
             pageNumber: "1",
-            pageSize: "100",
+            pageSize: "1000",
             branchIds: [],
             departmentIds: [])
         .then((result) {
@@ -73,16 +76,6 @@ class _MyHomePageState extends State<MyHomePage>
       key: mainKey,
       drawer: MyDrawer(0),
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              size: 40,
-              color: Color(0xffCBEEF3),
-            ),
-            onPressed: () => {},
-          )
-        ],
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
@@ -131,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage>
                 image: AssetImage("assets/images/pattern.png"),
                 fit: BoxFit.fitHeight)),
         child: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
+//          physics: NeverScrollableScrollPhysics(),
           controller: _tabController,
           children: [
             getWaitingTickets(),
@@ -361,196 +354,266 @@ class _MyHomePageState extends State<MyHomePage>
   getClosedTickets() {
     return closedTickets != null
         ? closedTickets.isNotEmpty
-            ? ListView.builder(
-                itemCount: closedTickets.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 3.0,
-                    color: Color(0xffCBEEF3),
-                    margin:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 80,
-                            height: 60,
-                            child: Stack(
-                              alignment: Alignment.center,
+        ? Stack(
+      children: [
+        ListView.builder(
+            itemCount: closedTickets.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 3.0,
+                color: Color(0xffCBEEF3),
+                margin: EdgeInsets.symmetric(
+                    vertical: 8.0, horizontal: 16.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 80,
+                        height: 60,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                                'assets/images/ticket.svg'),
+                            Text(
+                              closedTickets[index]
+                                  .ticketNumber
+                                  .toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      child: VerticalDivider(
+                        thickness: 1,
+                        color: Colors.black,
+                      ),
+                      height: 50,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.stretch,
+                          children: [
+                            Align(
+                              alignment: AlignmentDirectional.topEnd,
+                              child: InkWell(
+                                onTap: () {
+                                  _pc.open();
+                                  NetworkClient()
+                                      .getClosedTicketInfo(
+                                      ticketId: tickets[index].id)
+                                      .then((result) {
+                                    if (result is SuccessState) {
+                                      setState(() {
+                                        singleTicket =
+                                            result.value.data;
+                                      });
+                                    } else {
+                                      mainKey.currentState
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          (result as ErrorState)
+                                              .msg
+                                              .message,
+                                          style: TextStyle(
+                                              fontFamily:
+                                              'Helvetica'),
+                                        ),
+                                        duration:
+                                        Duration(seconds: 3),
+                                      ));
+                                    }
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.info_outline),
+                                ),
+                              ),
+                            ),
+                            Row(
                               children: [
-                                SvgPicture.asset('assets/images/ticket.svg'),
                                 Text(
-                                  closedTickets[index].ticketNumber.toString(),
+                                  AppLocalizations
+                                      .of(context)
+                                      .branch,
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 18.0),
-                                )
+                                      fontSize: 18.0,
+                                      color: Color(0xff181C1A)),
+                                ),
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    AppLocalizations
+                                        .of(context)
+                                        .languageCode ==
+                                        'en'
+                                        ? closedTickets[index]
+                                        .branchNameEN
+                                        : closedTickets[index]
+                                        .branchNameAR,
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff181C1A)),
+                                    softWrap: true,
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          child: VerticalDivider(
-                            thickness: 1,
-                            color: Colors.black,
-                          ),
-                          height: 50,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context).branch,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        AppLocalizations.of(context)
-                                                    .languageCode ==
-                                                'en'
-                                            ? closedTickets[index].branchNameEN
-                                            : closedTickets[index].branchNameAR,
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      .department,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Color(0xff181C1A)),
                                 ),
                                 SizedBox(
-                                  height: 5.0,
+                                  width: 5.0,
                                 ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context).department,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        AppLocalizations.of(
-                                                        context)
-                                                    .languageCode ==
-                                                'en'
-                                            ? closedTickets[index]
-                                                .departementNameEN
-                                            : closedTickets[index]
-                                                .departementNameAR,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context).ticketState,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)
-                                                  .languageCode ==
-                                              'en'
-                                          ? closedTickets[index].statusNameEN
-                                          : closedTickets[index].statusNameAR,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .currentNumber,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Text(
-                                      closedTickets[index]
-                                          .currentNumber
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional.centerEnd,
+                                Expanded(
                                   child: Text(
-                                    updateDateFormat(
-                                        closedTickets[index].createTime),
+                                    AppLocalizations
+                                        .of(
+                                        context)
+                                        .languageCode ==
+                                        'en'
+                                        ? closedTickets[index]
+                                        .departementNameEN
+                                        : closedTickets[index]
+                                        .departementNameAR,
+                                    softWrap: true,
                                     style: TextStyle(
-                                        fontSize: 14.0,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
                                         color: Color(0xff181C1A)),
                                   ),
                                 ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      .ticketState,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Color(0xff181C1A)),
+                                ),
                                 SizedBox(
-                                  height: 5.0,
+                                  width: 5.0,
+                                ),
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      .languageCode ==
+                                      'en'
+                                      ? closedTickets[index]
+                                      .statusNameEN
+                                      : closedTickets[index]
+                                      .statusNameAR,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff181C1A)),
                                 ),
                               ],
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                })
-            : Center(
-                child: Text(
-                  AppLocalizations.of(context).noClosedTickets,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffCBEEF3),
-                  ),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      .currentNumber,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Color(0xff181C1A)),
+                                ),
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                                Text(
+                                  closedTickets[index]
+                                      .currentNumber
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff181C1A)),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Align(
+                              alignment:
+                              AlignmentDirectional.centerEnd,
+                              child: Text(
+                                updateDateFormat(
+                                    closedTickets[index].createTime),
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Color(0xff181C1A)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              )
+              );
+            }),
+        SlidingUpPanel(
+          minHeight: 0.0,
+          controller: _pc,
+          renderPanelSheet: false,
+          panel: _floatingPanel(),
+          backdropEnabled: true,
+        )
+      ],
+    )
+        : Center(
+      child: Text(
+        AppLocalizations
+            .of(context)
+            .noClosedTickets,
+        style: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+          color: Color(0xffCBEEF3),
+        ),
+      ),
+    )
         : Center(
             child: CircularProgressIndicator(),
           );
@@ -559,208 +622,403 @@ class _MyHomePageState extends State<MyHomePage>
   getMissedTickets() {
     return missedTickets != null
         ? missedTickets.isNotEmpty
-            ? ListView.builder(
-                itemCount: missedTickets.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 3.0,
-                    color: Color(0xffCBEEF3),
-                    margin:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 80,
-                            height: 60,
-                            child: Stack(
-                              alignment: Alignment.center,
+        ? Stack(
+      children: [
+        ListView.builder(
+            itemCount: missedTickets.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 3.0,
+                color: Color(0xffCBEEF3),
+                margin: EdgeInsets.symmetric(
+                    vertical: 8.0, horizontal: 16.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 80,
+                        height: 60,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                                'assets/images/ticket.svg'),
+                            Text(
+                              missedTickets[index]
+                                  .ticketNumber
+                                  .toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      child: VerticalDivider(
+                        thickness: 1,
+                        color: Colors.black,
+                      ),
+                      height: 50,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.stretch,
+                          children: [
+                            Align(
+                              alignment: AlignmentDirectional.topEnd,
+                              child: InkWell(
+                                onTap: () {
+                                  _pc.open();
+                                  NetworkClient()
+                                      .getClosedTicketInfo(
+                                      ticketId: tickets[index].id)
+                                      .then((result) {
+                                    if (result is SuccessState) {
+                                      setState(() {
+                                        singleTicket =
+                                            result.value.data;
+                                      });
+                                    } else {
+                                      mainKey.currentState
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          (result as ErrorState)
+                                              .msg
+                                              .message,
+                                          style: TextStyle(
+                                              fontFamily:
+                                              'Helvetica'),
+                                        ),
+                                        duration:
+                                        Duration(seconds: 3),
+                                      ));
+                                    }
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.info_outline),
+                                ),
+                              ),
+                            ),
+                            Row(
                               children: [
-                                SvgPicture.asset('assets/images/ticket.svg'),
                                 Text(
-                                  missedTickets[index].ticketNumber.toString(),
+                                  AppLocalizations
+                                      .of(context)
+                                      .branch,
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 18.0),
-                                )
+                                      fontSize: 18.0,
+                                      color: Color(0xff181C1A)),
+                                ),
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    AppLocalizations
+                                        .of(context)
+                                        .languageCode ==
+                                        'en'
+                                        ? missedTickets[index]
+                                        .branchNameEN
+                                        : missedTickets[index]
+                                        .branchNameAR,
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff181C1A)),
+                                    softWrap: true,
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          child: VerticalDivider(
-                            thickness: 1,
-                            color: Colors.black,
-                          ),
-                          height: 50,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context).branch,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        AppLocalizations.of(context)
-                                                    .languageCode ==
-                                                'en'
-                                            ? missedTickets[index].branchNameEN
-                                            : missedTickets[index].branchNameAR,
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      .department,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Color(0xff181C1A)),
                                 ),
                                 SizedBox(
-                                  height: 5.0,
+                                  width: 5.0,
                                 ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context).department,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        AppLocalizations.of(
-                                                        context)
-                                                    .languageCode ==
-                                                'en'
-                                            ? missedTickets[index]
-                                                .departementNameEN
-                                            : missedTickets[index]
-                                                .departementNameAR,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context).ticketState,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)
-                                                  .languageCode ==
-                                              'en'
-                                          ? missedTickets[index].statusNameEN
-                                          : missedTickets[index].statusNameAR,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .currentNumber,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Text(
-                                      missedTickets[index]
-                                          .currentNumber
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional.centerEnd,
+                                Expanded(
                                   child: Text(
-                                    updateDateFormat(
-                                        missedTickets[index].createTime),
+                                    AppLocalizations
+                                        .of(
+                                        context)
+                                        .languageCode ==
+                                        'en'
+                                        ? missedTickets[index]
+                                        .departementNameEN
+                                        : missedTickets[index]
+                                        .departementNameAR,
+                                    softWrap: true,
                                     style: TextStyle(
-                                        fontSize: 14.0,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
                                         color: Color(0xff181C1A)),
                                   ),
                                 ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      .ticketState,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Color(0xff181C1A)),
+                                ),
                                 SizedBox(
-                                  height: 5.0,
+                                  width: 5.0,
+                                ),
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      .languageCode ==
+                                      'en'
+                                      ? missedTickets[index]
+                                      .statusNameEN
+                                      : missedTickets[index]
+                                      .statusNameAR,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff181C1A)),
                                 ),
                               ],
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                })
-            : Center(
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  AppLocalizations
+                                      .of(context)
+                                      .currentNumber,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Color(0xff181C1A)),
+                                ),
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                                Text(
+                                  missedTickets[index]
+                                      .currentNumber
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff181C1A)),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Align(
+                              alignment:
+                              AlignmentDirectional.centerEnd,
+                              child: Text(
+                                updateDateFormat(
+                                    missedTickets[index].createTime),
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Color(0xff181C1A)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }),
+        SlidingUpPanel(
+          minHeight: 0.0,
+          controller: _pc,
+          renderPanelSheet: false,
+          panel: _floatingPanel(),
+          backdropEnabled: true,
+        )
+      ],
+    )
+        : Center(
+      child: Text(
+        AppLocalizations
+            .of(context)
+            .noMissedTickets,
+        style: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+          color: Color(0xffCBEEF3),
+        ),
+      ),
+    )
+        : Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _floatingPanel() {
+    return Container(
+      decoration: BoxDecoration(
+          color: Color(0xff06DAB0),
+          borderRadius: BorderRadius.all(Radius.circular(24.0)),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20.0,
+              color: Colors.grey,
+            ),
+          ]),
+      margin: const EdgeInsets.all(24.0),
+      padding: EdgeInsets.all(14.0),
+      child: singleTicket != null
+          ? Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            width: 80,
+            height: 60,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SvgPicture.asset('assets/images/ticket.svg'),
+                Text(
+                  singleTicket.ticketNumber.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          ListTile(
+            title: Text(
+              'Ticket Number',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Color(0xff181C1A),
+              ),
+            ),
+            leading: Icon(
+              Icons.confirmation_number,
+              color: Color(0xff181C1A),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              singleTicket.id.toString(),
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Color(0xffCBEEF3),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          ListTile(
+            title: Text(
+              'Closed By',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Color(0xff181C1A),
+              ),
+            ),
+            leading: Icon(
+              Icons.no_encryption,
+              color: Color(0xff181C1A),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              singleTicket.employeeName,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Color(0xffCBEEF3),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          ListTile(
+            title: Text(
+              'Information',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Color(0xff181C1A),
+              ),
+            ),
+            leading: Icon(
+              Icons.info,
+              color: Color(0xff181C1A),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: Text(
-                  AppLocalizations.of(context).noMissedTickets,
+                  singleTicket.information != null
+                      ? singleTicket.information
+                      : "No Information Available",
                   style: TextStyle(
                     fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
                     color: Color(0xffCBEEF3),
                   ),
+                  textAlign: TextAlign.center,
                 ),
-              )
-        : Center(
-            child: CircularProgressIndicator(),
-          );
+              ),
+            ),
+          )
+        ],
+      )
+          : Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 
   String updateDateFormat(String date) {
     var formatter = DateFormat.yMMMEd(
-            AppLocalizations.of(context).languageCode == 'en' ? 'en' : 'ar')
+        AppLocalizations
+            .of(context)
+            .languageCode == 'en' ? 'en' : 'ar')
         .add_jm();
     print(formatter.locale);
     String formatted = formatter.format(DateTime.parse(date));
-    print(DateTime.parse(date).timeZoneName);
+    print(DateTime
+        .parse(date)
+        .timeZoneName);
     print(formatted);
     return formatted;
   }

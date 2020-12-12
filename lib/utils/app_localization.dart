@@ -62,12 +62,24 @@ class AppLocalizations {
       'login': 'Login',
       'logout': 'Logout',
       'branches': 'Branches',
+      'departments': 'Departments',
       'waitingTickets': 'Waiting Tickets',
       'closedTickets': 'Closed Tickets',
       'missedTickets': 'Missed Tickets',
       'noWaitingTickets': 'No Waiting Tickets Available Today',
       'noClosedTickets': 'No Closed Tickets Available Today',
-      'noMissedTickets': 'No Missed Tickets Available Today'
+      'noMissedTickets': 'No Missed Tickets Available Today',
+      'noHistoryTickets': 'No History Tickets Available',
+      'ticketsHistory': 'Tickets History',
+      'ticketStates': 'Ticket States',
+      'submit': 'Submit',
+      'filtrationToShowTicketsHistory': 'Filtration To Show Tickets History',
+      'ticketDate': 'Ticket Date',
+      'ok': 'OK',
+      'cancel': 'CANCEL',
+      'pleaseSelectOneOrMore': 'Please Select One or More Item',
+      'selectAll': 'Select All',
+      'search': 'Search',
     },
     'ar': {
       'title': 'Bel-Door',
@@ -110,14 +122,67 @@ class AppLocalizations {
       'login': 'تـسجيـل الدخــول',
       'logout': 'تـسجيـل خــروج',
       'branches': 'الفــروع',
+      'departments': 'اﻷقســام',
       'waitingTickets': 'تذاكر الانتظار',
       'closedTickets': 'تذاكر مغلقة',
       'missedTickets': 'تذاكر فائتة',
       'noWaitingTickets': 'لا توجد تذاكر انتظار متاحة اليوم',
       'noClosedTickets': 'لا توجد تذاكر مغلقة متاحة اليوم',
-      'noMissedTickets': 'لا توجد تذاكر فائتة متاحة اليوم'
+      'noMissedTickets': 'لا توجد تذاكر فائتة متاحة اليوم',
+      'noHistoryTickets': 'لا توجد تذاكر سـابقة متاحة',
+      'ticketsHistory': 'التـذاكـر السـابقة',
+      'ticketStates': 'حـالات التـذكـرة',
+      'submit': 'إرسال',
+      'filtrationToShowTicketsHistory': 'التصفـية لإظهار التذاكر السـابـقة',
+      'ticketDate': 'تــاريـخ التـذكـرة',
+      'ok': 'حسنا',
+      'cancel': 'إلـغـاء',
+      'pleaseSelectOneOrMore': 'يرجى تحديد عنصر واحد أو أكثر',
+      'selectAll': 'تحـديـد الكـل',
+      'search': 'بـحــث',
     },
   };
+
+  String get search {
+    return _localizedValues[locale.languageCode]['search'];
+  }
+
+  String get selectAll {
+    return _localizedValues[locale.languageCode]['selectAll'];
+  }
+
+  String get ok {
+    return _localizedValues[locale.languageCode]['ok'];
+  }
+
+  String get cancel {
+    return _localizedValues[locale.languageCode]['cancel'];
+  }
+
+  String get pleaseSelectOneOrMore {
+    return _localizedValues[locale.languageCode]['pleaseSelectOneOrMore'];
+  }
+
+  String get ticketStates {
+    return _localizedValues[locale.languageCode]['ticketStates'];
+  }
+
+  String get submit {
+    return _localizedValues[locale.languageCode]['submit'];
+  }
+
+  String get filtrationToShowTicketsHistory {
+    return _localizedValues[locale.languageCode]
+        ['filtrationToShowTicketsHistory'];
+  }
+
+  String get ticketDate {
+    return _localizedValues[locale.languageCode]['ticketDate'];
+  }
+
+  String get ticketsHistory {
+    return _localizedValues[locale.languageCode]['ticketsHistory'];
+  }
 
   String get noWaitingTickets {
     return _localizedValues[locale.languageCode]['noWaitingTickets'];
@@ -129,6 +194,10 @@ class AppLocalizations {
 
   String get noMissedTickets {
     return _localizedValues[locale.languageCode]['noMissedTickets'];
+  }
+
+  String get noHistoryTickets {
+    return _localizedValues[locale.languageCode]['noHistoryTickets'];
   }
 
   String get waitingTickets {
@@ -157,6 +226,10 @@ class AppLocalizations {
 
   String get branches {
     return _localizedValues[locale.languageCode]['branches'];
+  }
+
+  String get departments {
+    return _localizedValues[locale.languageCode]['departments'];
   }
 
   String get loginTitle {
