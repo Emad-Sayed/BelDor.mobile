@@ -9,6 +9,7 @@ import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -81,7 +82,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
         child: ticket != null
             ? Card(
                 elevation: 3.0,
-                color: Color(0xffCBEEF3),
+                color: AppColors.ACCENT_COLOR,
                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,7 +146,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                       AppLocalizations.of(context).branch,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -160,7 +161,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
+                                            color: AppColors.PRIMARY_DARK_COLOR),
                                         softWrap: true,
                                       ),
                                     ),
@@ -175,7 +176,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                       AppLocalizations.of(context).department,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -191,7 +192,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
+                                            color: AppColors.PRIMARY_DARK_COLOR),
                                       ),
                                     ),
                                   ],
@@ -205,7 +206,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                       AppLocalizations.of(context).ticketState,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -219,7 +220,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                   ],
                                 ),
@@ -233,7 +234,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                           .currentNumber,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -243,7 +244,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                   ],
                                 ),
@@ -256,7 +257,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
                                     updateDateFormat(ticket.createTime),
                                     style: TextStyle(
                                         fontSize: 14.0,
-                                        color: Color(0xff181C1A)),
+                                        color: AppColors.PRIMARY_DARK_COLOR),
                                   ),
                                 ),
                                 SizedBox(

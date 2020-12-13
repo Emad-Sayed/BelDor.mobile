@@ -1,4 +1,5 @@
 import 'package:bel_dor/screen/tickets_history_filter.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 import 'app_localization.dart';
@@ -21,7 +22,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: Icon(
               Icons.search,
               size: 40,
-              color: Color(0xffCBEEF3),
+              color: AppColors.ACCENT_COLOR,
             ),
             onPressed: () => {
               Navigator.of(context).push(
@@ -37,7 +38,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: Icon(
           Icons.menu,
           size: 40,
-          color: Color(0xffCBEEF3),
+          color: AppColors.ACCENT_COLOR,
         ),
         // change this size and style
         onPressed: () => mainKey.currentState.openDrawer(),
@@ -48,7 +49,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             .title,
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: Color(0xffCBEEF3),
+            color: AppColors.ACCENT_COLOR,
             fontSize: 30.0,
             fontWeight: FontWeight.bold),
       ),

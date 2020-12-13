@@ -6,6 +6,7 @@ import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -110,7 +111,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                 itemBuilder: (context, index) {
                   return Card(
                     elevation: 3.0,
-                    color: Color(0xffCBEEF3),
+                    color: AppColors.ACCENT_COLOR,
                     margin:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                     child: Row(
@@ -191,7 +192,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                       AppLocalizations.of(context).branch,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -206,7 +207,8 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
+                                            color:
+                                                AppColors.PRIMARY_DARK_COLOR),
                                         softWrap: true,
                                       ),
                                     ),
@@ -221,7 +223,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                       AppLocalizations.of(context).department,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -237,7 +239,8 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
+                                            color:
+                                                AppColors.PRIMARY_DARK_COLOR),
                                       ),
                                     ),
                                   ],
@@ -251,7 +254,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                       AppLocalizations.of(context).ticketState,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -265,7 +268,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                   ],
                                 ),
@@ -278,7 +281,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                     updateDateFormat(tickets[index].createTime),
                                     style: TextStyle(
                                         fontSize: 14.0,
-                                        color: Color(0xff181C1A)),
+                                        color: AppColors.PRIMARY_DARK_COLOR),
                                   ),
                                 ),
                                 SizedBox(
@@ -298,7 +301,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xffCBEEF3),
+                    color: AppColors.ACCENT_COLOR,
                   ),
                 ),
               )
@@ -310,7 +313,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
   Widget _floatingPanel() {
     return Container(
       decoration: BoxDecoration(
-          color: Color(0xff06DAB0),
+          color: AppColors.PRIMARY_COLOR,
           borderRadius: BorderRadius.all(Radius.circular(24.0)),
           boxShadow: [
             BoxShadow(
@@ -346,12 +349,12 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                     'Ticket Number',
                     style: TextStyle(
                       fontSize: 20.0,
-                      color: Color(0xff181C1A),
+                      color: AppColors.PRIMARY_DARK_COLOR,
                     ),
                   ),
                   leading: Icon(
                     Icons.confirmation_number,
-                    color: Color(0xff181C1A),
+                    color: AppColors.PRIMARY_DARK_COLOR,
                   ),
                 ),
                 Padding(
@@ -360,7 +363,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                     singleTicket.id.toString(),
                     style: TextStyle(
                       fontSize: 18.0,
-                      color: Color(0xffCBEEF3),
+                      color: AppColors.ACCENT_COLOR,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -370,12 +373,12 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                     'Closed By',
                     style: TextStyle(
                       fontSize: 20.0,
-                      color: Color(0xff181C1A),
+                      color: AppColors.PRIMARY_DARK_COLOR,
                     ),
                   ),
                   leading: Icon(
                     Icons.no_encryption,
-                    color: Color(0xff181C1A),
+                    color: AppColors.PRIMARY_DARK_COLOR,
                   ),
                 ),
                 Padding(
@@ -384,7 +387,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                     singleTicket.employeeName,
                     style: TextStyle(
                       fontSize: 18.0,
-                      color: Color(0xffCBEEF3),
+                      color: AppColors.ACCENT_COLOR,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -394,12 +397,12 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                     'Information',
                     style: TextStyle(
                       fontSize: 20.0,
-                      color: Color(0xff181C1A),
+                      color: AppColors.PRIMARY_DARK_COLOR,
                     ),
                   ),
                   leading: Icon(
                     Icons.info,
-                    color: Color(0xff181C1A),
+                    color: AppColors.PRIMARY_DARK_COLOR,
                   ),
                 ),
                 Expanded(
@@ -413,7 +416,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                             : "No Information Available",
                         style: TextStyle(
                           fontSize: 18.0,
-                          color: Color(0xffCBEEF3),
+                          color: AppColors.ACCENT_COLOR,
                         ),
                         textAlign: TextAlign.center,
                       ),

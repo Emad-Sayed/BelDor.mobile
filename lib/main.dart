@@ -1,4 +1,5 @@
 import 'package:bel_dor/screen/splash_screen.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,10 +54,10 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   // Define the default brightness and colors.
-                  primaryColor: Color(0xff06DAB0),
-                  unselectedWidgetColor: Color(0xff06DAB0),
-                  accentColor: Color(0xffCBEEF3),
-                  primaryColorDark: Color(0xff181C1A),
+                  primaryColor: AppColors.PRIMARY_COLOR,
+                  unselectedWidgetColor: AppColors.PRIMARY_COLOR,
+                  accentColor: AppColors.ACCENT_COLOR,
+                  primaryColorDark: AppColors.PRIMARY_DARK_COLOR,
                 ),
                 home: SplashScreen(),
               ));

@@ -6,6 +6,7 @@ import 'package:bel_dor/screen/ticket_added_screen.dart';
 import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -114,7 +115,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
           AppLocalizations
               .of(context)
               .departments,
-          style: TextStyle(fontSize: 20, color: Color(0xff06DAB0)),
+          style: TextStyle(fontSize: 20, color: AppColors.PRIMARY_COLOR),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -174,7 +175,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
                         style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xff181C1A)),
+                            color: AppColors.PRIMARY_DARK_COLOR),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -220,7 +221,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
           AppLocalizations
               .of(context)
               .branches,
-          style: TextStyle(fontSize: 20, color: Color(0xff06DAB0)),
+          style: TextStyle(fontSize: 20, color: AppColors.PRIMARY_COLOR),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -294,7 +295,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
                         style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xff181C1A)),
+                            color: AppColors.PRIMARY_DARK_COLOR),
                         textAlign: TextAlign.center,
                       ),
                     ),

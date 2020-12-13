@@ -6,6 +6,7 @@ import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -81,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage>
           icon: Icon(
             Icons.menu,
             size: 40,
-            color: Color(0xffCBEEF3),
+            color: AppColors.ACCENT_COLOR,
           ),
           // change this size and style
           onPressed: () => mainKey.currentState.openDrawer(),
@@ -90,16 +91,16 @@ class _MyHomePageState extends State<MyHomePage>
           AppLocalizations.of(context).title,
           textAlign: TextAlign.center,
           style: TextStyle(
-              color: Color(0xffCBEEF3),
+              color: AppColors.ACCENT_COLOR,
               fontSize: 30.0,
               fontWeight: FontWeight.bold),
         ),
         bottom: TabBar(
           physics: NeverScrollableScrollPhysics(),
           controller: _tabController,
-          indicatorColor: Color(0xffCBEEF3),
-          labelColor: Color(0xffCBEEF3),
-          unselectedLabelColor: Color(0xff181C1A),
+          indicatorColor: AppColors.ACCENT_COLOR,
+          labelColor: AppColors.ACCENT_COLOR,
+          unselectedLabelColor: AppColors.PRIMARY_DARK_COLOR,
           tabs: [
             Tab(
               text: AppLocalizations.of(context).waitingTickets,
@@ -142,13 +143,13 @@ class _MyHomePageState extends State<MyHomePage>
         },
         label: Text(
           AppLocalizations.of(context).generateTicket,
-          style: TextStyle(fontSize: 16.0, color: Color(0xff06DAB0)),
+          style: TextStyle(fontSize: 16.0, color: AppColors.PRIMARY_COLOR),
         ),
         icon: Icon(
           Icons.add,
-          color: Color(0xff06DAB0),
+          color: AppColors.PRIMARY_COLOR,
         ),
-        backgroundColor: Color(0xff181C1A),
+        backgroundColor: AppColors.PRIMARY_DARK_COLOR,
       ),
     );
   }
@@ -162,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage>
                 itemBuilder: (context, index) {
                   return Card(
                     elevation: 3.0,
-                    color: Color(0xffCBEEF3),
+                    color: AppColors.ACCENT_COLOR,
                     margin:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                     child: Row(
@@ -205,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       AppLocalizations.of(context).branch,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -221,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage>
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
+                                            color: AppColors.PRIMARY_DARK_COLOR),
                                         softWrap: true,
                                       ),
                                     ),
@@ -236,7 +237,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       AppLocalizations.of(context).department,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -254,7 +255,7 @@ class _MyHomePageState extends State<MyHomePage>
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold,
-                                            color: Color(0xff181C1A)),
+                                            color: AppColors.PRIMARY_DARK_COLOR),
                                       ),
                                     ),
                                   ],
@@ -268,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       AppLocalizations.of(context).ticketState,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -282,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                   ],
                                 ),
@@ -296,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage>
                                           .currentNumber,
                                       style: TextStyle(
                                           fontSize: 18.0,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                     SizedBox(
                                       width: 5.0,
@@ -308,7 +309,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xff181C1A)),
+                                          color: AppColors.PRIMARY_DARK_COLOR),
                                     ),
                                   ],
                                 ),
@@ -322,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage>
                                         waitingTickets[index].createTime),
                                     style: TextStyle(
                                         fontSize: 14.0,
-                                        color: Color(0xff181C1A)),
+                                        color: AppColors.PRIMARY_DARK_COLOR),
                                   ),
                                 ),
                                 SizedBox(
@@ -342,7 +343,7 @@ class _MyHomePageState extends State<MyHomePage>
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xffCBEEF3),
+                    color: AppColors.ACCENT_COLOR,
                   ),
                 ),
               )
@@ -362,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage>
             itemBuilder: (context, index) {
               return Card(
                 elevation: 3.0,
-                color: Color(0xffCBEEF3),
+                color: AppColors.ACCENT_COLOR,
                 margin: EdgeInsets.symmetric(
                     vertical: 8.0, horizontal: 16.0),
                 child: Row(
@@ -449,7 +450,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       .branch,
                                   style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                                 SizedBox(
                                   width: 5.0,
@@ -467,7 +468,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xff181C1A)),
+                                        color: AppColors.PRIMARY_DARK_COLOR),
                                     softWrap: true,
                                   ),
                                 ),
@@ -484,7 +485,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       .department,
                                   style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                                 SizedBox(
                                   width: 5.0,
@@ -504,7 +505,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xff181C1A)),
+                                        color: AppColors.PRIMARY_DARK_COLOR),
                                   ),
                                 ),
                               ],
@@ -520,7 +521,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       .ticketState,
                                   style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                                 SizedBox(
                                   width: 5.0,
@@ -537,7 +538,7 @@ class _MyHomePageState extends State<MyHomePage>
                                   style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                               ],
                             ),
@@ -552,7 +553,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       .currentNumber,
                                   style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                                 SizedBox(
                                   width: 5.0,
@@ -564,7 +565,7 @@ class _MyHomePageState extends State<MyHomePage>
                                   style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                               ],
                             ),
@@ -579,7 +580,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     closedTickets[index].createTime),
                                 style: TextStyle(
                                     fontSize: 14.0,
-                                    color: Color(0xff181C1A)),
+                                    color: AppColors.PRIMARY_DARK_COLOR),
                               ),
                             ),
                             SizedBox(
@@ -610,7 +611,7 @@ class _MyHomePageState extends State<MyHomePage>
         style: TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
-          color: Color(0xffCBEEF3),
+          color: AppColors.ACCENT_COLOR,
         ),
       ),
     )
@@ -630,7 +631,7 @@ class _MyHomePageState extends State<MyHomePage>
             itemBuilder: (context, index) {
               return Card(
                 elevation: 3.0,
-                color: Color(0xffCBEEF3),
+                color: AppColors.ACCENT_COLOR,
                 margin: EdgeInsets.symmetric(
                     vertical: 8.0, horizontal: 16.0),
                 child: Row(
@@ -717,7 +718,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       .branch,
                                   style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                                 SizedBox(
                                   width: 5.0,
@@ -735,7 +736,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xff181C1A)),
+                                        color: AppColors.PRIMARY_DARK_COLOR),
                                     softWrap: true,
                                   ),
                                 ),
@@ -752,7 +753,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       .department,
                                   style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                                 SizedBox(
                                   width: 5.0,
@@ -772,7 +773,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xff181C1A)),
+                                        color: AppColors.PRIMARY_DARK_COLOR),
                                   ),
                                 ),
                               ],
@@ -788,7 +789,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       .ticketState,
                                   style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                                 SizedBox(
                                   width: 5.0,
@@ -805,7 +806,7 @@ class _MyHomePageState extends State<MyHomePage>
                                   style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                               ],
                             ),
@@ -820,7 +821,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       .currentNumber,
                                   style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                                 SizedBox(
                                   width: 5.0,
@@ -832,7 +833,7 @@ class _MyHomePageState extends State<MyHomePage>
                                   style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xff181C1A)),
+                                      color: AppColors.PRIMARY_DARK_COLOR),
                                 ),
                               ],
                             ),
@@ -847,7 +848,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     missedTickets[index].createTime),
                                 style: TextStyle(
                                     fontSize: 14.0,
-                                    color: Color(0xff181C1A)),
+                                    color: AppColors.PRIMARY_DARK_COLOR),
                               ),
                             ),
                             SizedBox(
@@ -878,7 +879,7 @@ class _MyHomePageState extends State<MyHomePage>
         style: TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
-          color: Color(0xffCBEEF3),
+          color: AppColors.ACCENT_COLOR,
         ),
       ),
     )
@@ -890,7 +891,7 @@ class _MyHomePageState extends State<MyHomePage>
   Widget _floatingPanel() {
     return Container(
       decoration: BoxDecoration(
-          color: Color(0xff06DAB0),
+          color: AppColors.PRIMARY_COLOR,
           borderRadius: BorderRadius.all(Radius.circular(24.0)),
           boxShadow: [
             BoxShadow(
@@ -926,12 +927,12 @@ class _MyHomePageState extends State<MyHomePage>
               'Ticket Number',
               style: TextStyle(
                 fontSize: 20.0,
-                color: Color(0xff181C1A),
+                color: AppColors.PRIMARY_DARK_COLOR,
               ),
             ),
             leading: Icon(
               Icons.confirmation_number,
-              color: Color(0xff181C1A),
+              color: AppColors.PRIMARY_DARK_COLOR,
             ),
           ),
           Padding(
@@ -940,7 +941,7 @@ class _MyHomePageState extends State<MyHomePage>
               singleTicket.id.toString(),
               style: TextStyle(
                 fontSize: 18.0,
-                color: Color(0xffCBEEF3),
+                color: AppColors.ACCENT_COLOR,
               ),
               textAlign: TextAlign.center,
             ),
@@ -950,12 +951,12 @@ class _MyHomePageState extends State<MyHomePage>
               'Closed By',
               style: TextStyle(
                 fontSize: 20.0,
-                color: Color(0xff181C1A),
+                color: AppColors.PRIMARY_DARK_COLOR,
               ),
             ),
             leading: Icon(
               Icons.no_encryption,
-              color: Color(0xff181C1A),
+              color: AppColors.PRIMARY_DARK_COLOR,
             ),
           ),
           Padding(
@@ -964,7 +965,7 @@ class _MyHomePageState extends State<MyHomePage>
               singleTicket.employeeName,
               style: TextStyle(
                 fontSize: 18.0,
-                color: Color(0xffCBEEF3),
+                color: AppColors.ACCENT_COLOR,
               ),
               textAlign: TextAlign.center,
             ),
@@ -974,12 +975,12 @@ class _MyHomePageState extends State<MyHomePage>
               'Information',
               style: TextStyle(
                 fontSize: 20.0,
-                color: Color(0xff181C1A),
+                color: AppColors.PRIMARY_DARK_COLOR,
               ),
             ),
             leading: Icon(
               Icons.info,
-              color: Color(0xff181C1A),
+              color: AppColors.PRIMARY_DARK_COLOR,
             ),
           ),
           Expanded(
@@ -993,7 +994,7 @@ class _MyHomePageState extends State<MyHomePage>
                       : "No Information Available",
                   style: TextStyle(
                     fontSize: 18.0,
-                    color: Color(0xffCBEEF3),
+                    color: AppColors.ACCENT_COLOR,
                   ),
                   textAlign: TextAlign.center,
                 ),

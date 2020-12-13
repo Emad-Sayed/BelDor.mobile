@@ -6,6 +6,7 @@ import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/screen/tickets_history.dart';
 import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/multiselect_formfield/multiselect_formfield.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -107,7 +108,7 @@ class _TicketsHistoryFilterState extends State<TicketsHistoryFilter> {
                           style: TextStyle(
                             fontSize: 22.0,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xffCBEEF3),
+                            color: AppColors.ACCENT_COLOR,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -127,7 +128,7 @@ class _TicketsHistoryFilterState extends State<TicketsHistoryFilter> {
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.calendar_today,
-                              color: Color(0xff06DAB0),
+                              color: AppColors.PRIMARY_COLOR,
                             ),
                             contentPadding:
                                 EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -149,14 +150,14 @@ class _TicketsHistoryFilterState extends State<TicketsHistoryFilter> {
                         padding: EdgeInsets.all(16),
                         child: MultiSelectFormField(
                           autovalidate: false,
-                          chipBackGroundColor: Color(0xff06DAB0),
+                          chipBackGroundColor: AppColors.PRIMARY_COLOR,
                           chipLabelStyle: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xffCBEEF3)),
+                              color: AppColors.ACCENT_COLOR),
                           dialogTextStyle:
                               TextStyle(fontWeight: FontWeight.bold),
-                          checkBoxActiveColor: Color(0xff06DAB0),
-                          checkBoxCheckColor: Color(0xffCBEEF3),
+                          checkBoxActiveColor: AppColors.PRIMARY_COLOR,
+                          checkBoxCheckColor: AppColors.ACCENT_COLOR,
                           dialogShapeBorder: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12.0))),
@@ -191,14 +192,14 @@ class _TicketsHistoryFilterState extends State<TicketsHistoryFilter> {
                         padding: EdgeInsets.all(16),
                         child: MultiSelectFormField(
                           autovalidate: false,
-                          chipBackGroundColor: Color(0xff06DAB0),
+                          chipBackGroundColor: AppColors.PRIMARY_COLOR,
                           chipLabelStyle: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xffCBEEF3)),
+                              color: AppColors.ACCENT_COLOR),
                           dialogTextStyle:
                               TextStyle(fontWeight: FontWeight.bold),
-                          checkBoxActiveColor: Color(0xff06DAB0),
-                          checkBoxCheckColor: Color(0xffCBEEF3),
+                          checkBoxActiveColor: AppColors.PRIMARY_COLOR,
+                          checkBoxCheckColor: AppColors.ACCENT_COLOR,
                           dialogShapeBorder: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12.0))),
@@ -234,14 +235,14 @@ class _TicketsHistoryFilterState extends State<TicketsHistoryFilter> {
                         padding: EdgeInsets.all(16),
                         child: MultiSelectFormField(
                           autovalidate: false,
-                          chipBackGroundColor: Color(0xff06DAB0),
+                          chipBackGroundColor: AppColors.PRIMARY_COLOR,
                           chipLabelStyle: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xffCBEEF3)),
+                              color: AppColors.ACCENT_COLOR),
                           dialogTextStyle:
                               TextStyle(fontWeight: FontWeight.bold),
-                          checkBoxActiveColor: Color(0xff06DAB0),
-                          checkBoxCheckColor: Color(0xffCBEEF3),
+                          checkBoxActiveColor: AppColors.PRIMARY_COLOR,
+                          checkBoxCheckColor: AppColors.ACCENT_COLOR,
                           dialogShapeBorder: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12.0))),
@@ -294,7 +295,7 @@ class _TicketsHistoryFilterState extends State<TicketsHistoryFilter> {
                         child: Card(
                           margin: EdgeInsets.all(16.0),
                           elevation: 3.0,
-                          color: Color(0xff06DAB0),
+                          color: AppColors.PRIMARY_COLOR,
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
@@ -302,7 +303,7 @@ class _TicketsHistoryFilterState extends State<TicketsHistoryFilter> {
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xffCBEEF3),
+                                color: AppColors.ACCENT_COLOR,
                               ),
                               textAlign: TextAlign.center,
                             ),

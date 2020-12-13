@@ -5,6 +5,7 @@ import 'package:bel_dor/screen/signup_screen.dart';
 import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -69,8 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Text(
                     AppLocalizations.of(context).loginTitle,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                        color: AppColors.ACCENT_COLOR),
                   ),
                   SizedBox(
                     height: 8.0,
@@ -80,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14.0,
-                      color: Color(0xFF757575),
+                      color: AppColors.ACCENT_COLOR,
                     ),
                   ),
                   SizedBox(
@@ -118,7 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: emailCont,
                             validator: (value) {
                               if (value.isEmpty) {
-                                return AppLocalizations.of(context).enterValidEmail;
+                                return AppLocalizations.of(context)
+                                    .enterValidEmail;
                               }
                               return null;
                             },
@@ -126,11 +130,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               prefixIcon: Icon(
                                 Icons.email,
                                 size: 30,
-                                color: Color(0xFF757575),
+                                color: AppColors.ACCENT_COLOR,
                               ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Color(0xFF757575)),
+                                    BorderSide(color: AppColors.ACCENT_COLOR),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide:
@@ -150,7 +154,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             key: passwordKey,
                             validator: (value) {
                               if (value.isEmpty) {
-                                return AppLocalizations.of(context).enterValidPassword;
+                                return AppLocalizations.of(context)
+                                    .enterValidPassword;
                               }
                               return null;
                             },
@@ -170,11 +175,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               prefixIcon: Icon(
                                 Icons.lock_outline,
                                 size: 30,
-                                color: Color(0xFF757575),
+                                color: AppColors.ACCENT_COLOR,
                               ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Color(0xFF757575)),
+                                    BorderSide(color: AppColors.ACCENT_COLOR),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide:
@@ -205,8 +210,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   CheckboxListTile(
-                    activeColor: Colors.white,
-                    checkColor: Colors.black,
+                    activeColor: AppColors.ACCENT_COLOR,
+                    checkColor: AppColors.PRIMARY_COLOR,
                     value: termsAccepted,
                     title: Text(AppLocalizations.of(context).conditionTitle,
                         style: TextStyle(fontSize: 14.0)),
@@ -282,7 +287,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             } else if (!termsAccepted) {
                               setState(() {
-                                errorText = AppLocalizations.of(context).termsAndConditionValidation;
+                                errorText = AppLocalizations.of(context)
+                                    .termsAndConditionValidation;
                                 showError = true;
                               });
                             }
@@ -291,7 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
-                              color: Colors.black54,
+                              color: AppColors.PRIMARY_DARK_COLOR,
                             ),
                             width: MediaQuery.of(context).size.width,
                             margin: EdgeInsets.symmetric(horizontal: 16.0),
@@ -301,7 +307,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16.0,
-                                color: Colors.white,
+                                color: AppColors.ACCENT_COLOR,
                               ),
                               textAlign: TextAlign.center,
                             ),
