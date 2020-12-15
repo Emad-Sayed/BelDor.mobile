@@ -5,6 +5,7 @@ import 'package:bel_dor/screen/branches_screen.dart';
 import 'package:bel_dor/screen/home_page_screen.dart';
 import 'package:bel_dor/screen/login_screen.dart';
 import 'package:bel_dor/screen/tickets_history_filter.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,6 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget _getHeader() {
     var user =
         JwtDecoder.decode(PreferenceUtils.getString(SharedFields.TOKEN, ""));
-    ;
     return Row(
       children: [
         user != null
@@ -90,10 +90,11 @@ class _MyDrawerState extends State<MyDrawer> {
                 child: Text(
                   user != null
                       ? user['Name']
-                      : AppLocalizations
-                      .of(context)
-                      .welcome,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                      : AppLocalizations.of(context).welcome,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                      color: AppColors.ACCENT_COLOR),
                 ),
               ),
               Padding(
@@ -102,7 +103,8 @@ class _MyDrawerState extends State<MyDrawer> {
                   children: [
                     Text(
                       AppLocalizations.of(context).yourCode,
-                      style: TextStyle(fontSize: 16.0),
+                      style: TextStyle(
+                          fontSize: 16.0, color: AppColors.ACCENT_COLOR),
                     ),
                     SizedBox(
                       width: 5.0,
@@ -110,7 +112,9 @@ class _MyDrawerState extends State<MyDrawer> {
                     Text(
                       user["Id"],
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16.0),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                          color: AppColors.ACCENT_COLOR),
                     ),
                   ],
                 ),
@@ -130,27 +134,19 @@ class _MyDrawerState extends State<MyDrawer> {
           drawerIcon: Icons.home,
           navigateTo: MyHomePage()),
       DrawerModel(
-          drawerTitle: AppLocalizations
-              .of(context)
-              .login,
+          drawerTitle: AppLocalizations.of(context).login,
           drawerIcon: Icons.chevron_right,
           navigateTo: LoginScreen()),
       DrawerModel(
-          drawerTitle: AppLocalizations
-              .of(context)
-              .branches,
+          drawerTitle: AppLocalizations.of(context).branches,
           drawerIcon: Icons.category,
           navigateTo: BranchesScreen()),
       DrawerModel(
-          drawerTitle: AppLocalizations
-              .of(context)
-              .ticketsHistory,
+          drawerTitle: AppLocalizations.of(context).ticketsHistory,
           drawerIcon: Icons.history,
           navigateTo: TicketsHistoryFilter()),
       DrawerModel(
-          drawerTitle: AppLocalizations
-              .of(context)
-              .logout,
+          drawerTitle: AppLocalizations.of(context).logout,
           drawerIcon: Icons.chevron_left,
           navigateTo: null),
     ];
@@ -165,7 +161,7 @@ class _MyDrawerState extends State<MyDrawer> {
           DrawerHeader(
             child: _getHeader(),
             decoration: BoxDecoration(
-              color: Colors.black54,
+              color: AppColors.PRIMARY_COLOR,
             ),
           ),
           Expanded(
@@ -188,7 +184,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         color: selectedMenuItemId == index
-                            ? Colors.black26
+                            ? AppColors.PRIMARY_DARK_COLOR
                             : Colors.transparent,
                       ),
                       margin:
@@ -196,11 +192,11 @@ class _MyDrawerState extends State<MyDrawer> {
                       child: ListTile(
                         title: Text(
                           _drawerData[index].drawerTitle,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: AppColors.PRIMARY_COLOR),
                         ),
                         leading: Icon(
                           _drawerData[index].drawerIcon,
-                          color: Colors.black,
+                          color: AppColors.PRIMARY_COLOR,
                         ),
                         onTap: () {
                           Navigator.pop(context);
@@ -231,40 +227,49 @@ class _MyDrawerState extends State<MyDrawer> {
             alignment: AlignmentDirectional.bottomStart,
             child: ListTile(
               dense: false,
-              title: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: chosenLanguage,
-                  items: <String>[
-                    AppLocalizations.of(context).english,
-                    AppLocalizations.of(context).arabic
-                  ].map((String value) {
-                    return new DropdownMenuItem<String>(
-                      value: value,
-                      child: new Text(
-                        value,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      chosenLanguage = newValue;
-                      if (newValue == AppLocalizations.of(context).english) {
-                        PreferenceUtils.setString(SharedFields.LANGUAGE, 'en');
-                      } else if (newValue ==
-                          AppLocalizations.of(context).arabic) {
-                        PreferenceUtils.setString(SharedFields.LANGUAGE, 'ar');
-                      }
-                      MyApp.restartApp(context);
-                    });
-                  },
+              title: Card(
+                color: AppColors.PRIMARY_DARK_COLOR,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: chosenLanguage,
+                    items: <String>[
+                      AppLocalizations.of(context).english,
+                      AppLocalizations.of(context).arabic
+                    ].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(color: AppColors.PRIMARY_COLOR),
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        chosenLanguage = newValue;
+                        if (newValue == AppLocalizations.of(context).english) {
+                          PreferenceUtils.setString(
+                              SharedFields.LANGUAGE, 'en');
+                        } else if (newValue ==
+                            AppLocalizations.of(context).arabic) {
+                          PreferenceUtils.setString(
+                              SharedFields.LANGUAGE, 'ar');
+                        }
+                        MyApp.restartApp(context);
+                      });
+                    },
+                  ),
                 ),
               ),
               leading: Container(
                   margin: EdgeInsets.all(8.0),
                   child: Text(
                     AppLocalizations.of(context).language,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.PRIMARY_COLOR),
                     textAlign: TextAlign.center,
                   )),
             ),
