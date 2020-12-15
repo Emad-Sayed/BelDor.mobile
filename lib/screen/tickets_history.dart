@@ -82,7 +82,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
-            color: Color(0xff26362E),
+            color: AppColors.CONTAINER_BG_COLOR,
             image: DecorationImage(
                 image: AssetImage("assets/images/pattern.png"),
                 fit: BoxFit.fitHeight),

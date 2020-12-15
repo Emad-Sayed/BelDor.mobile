@@ -5,6 +5,7 @@ import 'package:bel_dor/models/ticket_details.dart';
 import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/utils/app_localization.dart';
+import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
@@ -72,13 +73,7 @@ class _TicketAddedScreenState extends State<TicketAddedScreen> {
         mainKey: mainKey,
         showSearch: false,
       ),
-      body: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: Color(0xff26362E),
-            image: DecorationImage(
-                image: AssetImage("assets/images/pattern.png"),
-                fit: BoxFit.fitHeight)),
+      body: BackgroundWidget(
         child: ticket != null
             ? Card(
                 elevation: 3.0,

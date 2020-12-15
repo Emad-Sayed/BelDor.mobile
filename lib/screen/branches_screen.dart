@@ -4,6 +4,7 @@ import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/screen/ticket_added_screen.dart';
 import 'package:bel_dor/utils/app_localization.dart';
+import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
 import 'package:bel_dor/utils/utils.dart';
@@ -67,14 +68,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
         mainKey: mainKey,
         showSearch: false,
       ),
-      body: Container(
-        // width: MediaQuery.of(context).size.width,
-        // height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-              color: Color(0xff26362E),
-              image: DecorationImage(
-                  image: AssetImage("assets/images/pattern.png"),
-                  fit: BoxFit.fitHeight)),
+      body: BackgroundWidget(
           child: ListView(
             children: [
               buildBranchExpansionTile(context),

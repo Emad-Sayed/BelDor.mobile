@@ -5,6 +5,7 @@ import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/screen/tickets_history.dart';
 import 'package:bel_dor/utils/app_localization.dart';
+import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/multiselect_formfield/multiselect_formfield.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -85,14 +86,7 @@ class _TicketsHistoryFilterState extends State<TicketsHistoryFilter> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: mainKey,
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-            color: Color(0xff26362E),
-            image: DecorationImage(
-                image: AssetImage("assets/images/pattern.png"),
-                fit: BoxFit.fitHeight)),
+      body: BackgroundWidget(
         child: branches != null && departments != null
             ? SafeArea(
                 child: SingleChildScrollView(

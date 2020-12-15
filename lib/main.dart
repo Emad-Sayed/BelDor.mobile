@@ -1,4 +1,5 @@
 import 'package:bel_dor/screen/splash_screen.dart';
+import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -62,13 +63,7 @@ class _MyAppState extends State<MyApp> {
                 home: SplashScreen(),
               ));
         } else
-          return Container(
-            decoration: BoxDecoration(
-                color: Color(0xff26362E),
-                image: DecorationImage(
-                    image: AssetImage("assets/images/pattern.png"),
-                    fit: BoxFit.fitHeight)),
-          );
+          return BackgroundWidget();
       },
     );
   }
