@@ -2,15 +2,16 @@ import 'package:bel_dor/models/branch_details.dart';
 import 'package:bel_dor/models/deparment_details.dart';
 import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
-import 'package:bel_dor/screen/ticket_added_screen.dart';
 import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
-import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
+
+import 'ticket_added_screen.dart';
 
 class BranchesScreen extends StatefulWidget {
   @override
@@ -20,18 +21,15 @@ class BranchesScreen extends StatefulWidget {
 class _BranchesScreenState extends State<BranchesScreen> {
   final mainKey = GlobalKey<ScaffoldState>();
   List<BranchDetails> branches = List();
-  List<BranchDetails> branchItems;
+  List<DropdownMenuItem<String>> branchesMenuItems = List();
+  List<DropdownMenuItem<String>> departmentsMenuItems = List();
   List<DepartmentDetails> departments;
-  List<DepartmentDetails> departmentItems;
   bool showLoading = false, showDepartments;
-  TextEditingController branchEditingController = TextEditingController();
-  TextEditingController departmentEditingController = TextEditingController();
-  int selectedBranch = 0;
+  int selectedBranchId = 0;
+  String selectedBranchName, selectedDepartmentName;
 
   @override
   void dispose() {
-    branchEditingController.dispose();
-    departmentEditingController.dispose();
     super.dispose();
   }
 
@@ -43,7 +41,18 @@ class _BranchesScreenState extends State<BranchesScreen> {
       if (result is SuccessState) {
         setState(() {
           branches = result.value.data;
-          branchItems = List.of(branches);
+          branches.forEach((branch) {
+            branchesMenuItems.add(
+              DropdownMenuItem(
+                child: Text(AppLocalizations.of(context).languageCode == "en"
+                    ? branch.nameEN
+                    : branch.nameAR),
+                value: AppLocalizations.of(context).languageCode == "en"
+                    ? branch.nameEN
+                    : branch.nameAR,
+              ),
+            );
+          });
         });
       } else {
         mainKey.currentState.showSnackBar(SnackBar(
@@ -69,315 +78,141 @@ class _BranchesScreenState extends State<BranchesScreen> {
         showSearch: false,
       ),
       body: BackgroundWidget(
-          child: ListView(
-            children: [
-              buildBranchExpansionTile(context),
-              showDepartments != null
-                  ? Visibility(
-                  visible: showDepartments,
-                  replacement: Container(
-                    margin: EdgeInsets.only(
-                        top: MediaQuery
-                            .of(context)
-                            .size
-                            .height / 4 - 100),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                  child: buildDepartmentExpansionTile(context))
-                  : Container(),
-            ],
-          )),
-    );
-  }
-
-  Container buildDepartmentExpansionTile(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(
-          top: MediaQuery
-              .of(context)
-              .size
-              .height / 4 - 100,
-          left: 16.0,
-          right: 16.0,
-          bottom: 16.0),
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        title: Text(
-          AppLocalizations
-              .of(context)
-              .departments,
-          style: TextStyle(fontSize: 20, color: AppColors.PRIMARY_COLOR),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: TextField(
-              controller: departmentEditingController,
-              onChanged: (value) => filterSearchDepartmentsResults(value),
-              decoration: InputDecoration(
-                labelText: AppLocalizations
-                    .of(context)
-                    .search,
-                hintText: AppLocalizations
-                    .of(context)
-                    .search,
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
-        ),
-        children: [
-          departmentItems != null && departmentItems.isNotEmpty
-              ? Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            child: ListView.builder(
-              // physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: departmentItems.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..push(
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                TicketAddedScreen(
-                                  departmentId: departmentItems[index]
-                                      .departementId,
-                                  branchId: selectedBranch,
-                                )),
-                      );
-                  },
-                  child: Card(
-                    margin: EdgeInsets.all(8.0),
-                    elevation: 2.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Text(
-                        AppLocalizations
-                            .of(context)
-                            .languageCode == "en"
-                            ? departmentItems[index].departementNameEN
-                            : departmentItems[index].departementNameAR,
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.PRIMARY_DARK_COLOR),
-                        textAlign: TextAlign.center,
+        child: ListView(
+          children: [
+            buildBranchList(context),
+            showDepartments != null
+                ? Visibility(
+                    visible: showDepartments,
+                    replacement: Container(
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height / 4 - 100),
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-          )
-              : departmentItems == null
-              ? Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
-              : Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('No Departments Available'),
-              ),
-            ),
-          ),
-        ],
+                    child: buildDepartmentList(context))
+                : Container(),
+          ],
+        ),
       ),
     );
   }
 
-  Container buildBranchExpansionTile(BuildContext context) {
+  Container buildDepartmentList(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+      alignment: Alignment.center,
+      margin: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(8.0),
+      height: 100.0,
       color: Colors.white,
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        title: Text(
-          AppLocalizations
-              .of(context)
-              .branches,
-          style: TextStyle(fontSize: 20, color: AppColors.PRIMARY_COLOR),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: TextField(
-              controller: branchEditingController,
-              onChanged: (value) => filterSearchBranchesResults(value),
-              decoration: InputDecoration(
-                labelText: AppLocalizations
-                    .of(context)
-                    .search,
-                hintText: AppLocalizations
-                    .of(context)
-                    .search,
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
-        ),
-        children: [
-          branchItems != null && branchItems.isNotEmpty
-              ? Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            child: ListView.builder(
-              // physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: branchItems.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      showDepartments = false;
-                      selectedBranch = branchItems[index].id;
-                    });
-                    NetworkClient()
-                        .getBranchDepartments(
-                      branchId: selectedBranch.toString(),
-                    )
-                        .then((result) {
-                      if (result is SuccessState) {
-                        setState(() {
-                          departments = result.value.data[0].departements;
-                          departmentItems = List.of(departments);
-                          showDepartments = true;
-                        });
-                      } else {
-                        mainKey.currentState.showSnackBar(SnackBar(
-                          content: Text(
-                            (result as ErrorState).msg.message,
-                            style: TextStyle(fontFamily: 'Helvetica'),
-                          ),
-                          duration: Duration(seconds: 3),
-                        ));
-                      }
-                    });
-                  },
-                  child: Card(
-                    margin: EdgeInsets.all(8.0),
-                    elevation: 2.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Text(
-                        AppLocalizations
-                            .of(context)
-                            .languageCode == "en"
-                            ? branchItems[index].nameEN
-                            : branchItems[index].nameAR,
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.PRIMARY_DARK_COLOR),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          )
-              : branchItems == null
-              ? Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
-              : Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('No Branches Available'),
-              ),
-            ),
-          ),
-        ],
+      child: SearchableDropdown.single(
+        items: departmentsMenuItems,
+        value: selectedDepartmentName,
+        hint: "Choose Department",
+        searchHint: "Search A Department",
+        onChanged: (value) {
+          setState(() {
+            selectedDepartmentName = value;
+          });
+          Navigator.of(context)
+            ..pop()
+            ..push(
+              MaterialPageRoute(
+                  builder: (BuildContext context) => TicketAddedScreen(
+                        departmentId: departments
+                            .firstWhere((department) =>
+                                (AppLocalizations.of(context).languageCode ==
+                                        "en"
+                                    ? department.departementNameEN
+                                    : department.departementNameAR) ==
+                                selectedDepartmentName)
+                            .departementId,
+                        branchId: selectedBranchId,
+                      )),
+            );
+        },
+        dialogBox: true,
+        isExpanded: true,
+        // menuConstraints: BoxConstraints.tight(Size.fromHeight(350)),
       ),
     );
   }
 
-  void filterSearchBranchesResults(String query) {
-    List<BranchDetails> dummySearchList = List<BranchDetails>();
-    dummySearchList.addAll(branches);
-    if (query.isNotEmpty) {
-      List<BranchDetails> dummyListData = List<BranchDetails>();
-      dummySearchList.forEach((item) {
-        var itemName = AppLocalizations
-            .of(context)
-            .languageCode == "en"
-            ? item.nameEN
-            : item.nameAR;
-        if (itemName.toLowerCase().contains(query)) {
-          dummyListData.add(item);
-        }
-      });
-      setState(() {
-        branchItems.clear();
-        branchItems.addAll(dummyListData);
-      });
-      return;
-    } else {
-      setState(() {
-        branchItems.clear();
-        branchItems.addAll(branches);
-      });
-    }
+  Container buildBranchList(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(8.0),
+      height: 100.0,
+      color: Colors.white,
+      child: SearchableDropdown.single(
+        items: branchesMenuItems,
+        value: selectedBranchName,
+        hint: "Choose Branch",
+        searchHint: "Search A Branch",
+        onClear: () {
+          setState(() {
+            selectedBranchName = null;
+            showDepartments = null;
+          });
+        },
+        onChanged: (value) {
+          setState(() {
+            selectedBranchName = value;
+          });
+          if (selectedBranchName != null) getDepartments();
+        },
+        dialogBox: true,
+        isExpanded: true,
+        // menuConstraints: BoxConstraints.tight(Size.fromHeight(350)),
+      ),
+    );
   }
 
-  void filterSearchDepartmentsResults(String query) {
-    List<DepartmentDetails> dummySearchList = List<DepartmentDetails>();
-    dummySearchList.addAll(departments);
-    if (query.isNotEmpty) {
-      List<DepartmentDetails> dummyListData = List<DepartmentDetails>();
-      dummySearchList.forEach((item) {
-        var itemName = AppLocalizations
-            .of(context)
-            .languageCode == "en"
-            ? item.departementNameEN
-            : item.departementNameAR;
-        if (itemName.toLowerCase().contains(query)) {
-          dummyListData.add(item);
-        }
-      });
-      setState(() {
-        departmentItems.clear();
-        departmentItems.addAll(dummyListData);
-      });
-      return;
-    } else {
-      setState(() {
-        departmentItems.clear();
-        departmentItems.addAll(departments);
-      });
-    }
+  void getDepartments() {
+    setState(() {
+      showDepartments = false;
+    });
+    print(selectedBranchName);
+    selectedBranchId = branches
+        .firstWhere((branch) =>
+            (AppLocalizations.of(context).languageCode == "en"
+                ? branch.nameEN
+                : branch.nameAR) ==
+            selectedBranchName)
+        .id;
+    NetworkClient()
+        .getBranchDepartments(
+      branchId: selectedBranchId.toString(),
+    )
+        .then((result) {
+      if (result is SuccessState) {
+        setState(() {
+          departments = result.value.data[0].departements;
+          departments.forEach((department) {
+            departmentsMenuItems.add(
+              DropdownMenuItem(
+                child: Text(AppLocalizations.of(context).languageCode == "en"
+                    ? department.departementNameEN
+                    : department.departementNameAR),
+                value: AppLocalizations.of(context).languageCode == "en"
+                    ? department.departementNameEN
+                    : department.departementNameAR,
+              ),
+            );
+          });
+          showDepartments = true;
+        });
+      } else {
+        mainKey.currentState.showSnackBar(SnackBar(
+          content: Text(
+            (result as ErrorState).msg.message,
+            style: TextStyle(fontFamily: 'Helvetica'),
+          ),
+          duration: Duration(seconds: 3),
+        ));
+      }
+    });
   }
 }
