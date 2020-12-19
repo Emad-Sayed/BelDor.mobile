@@ -99,9 +99,9 @@ class _MyHomePageState extends State<MyHomePage>
         bottom: TabBar(
           physics: NeverScrollableScrollPhysics(),
           controller: _tabController,
-          indicatorColor: AppColors.ACCENT_COLOR,
-          labelColor: AppColors.ACCENT_COLOR,
-          unselectedLabelColor: AppColors.PRIMARY_DARK_COLOR,
+          indicatorColor: AppColors.PRIMARY_COLOR,
+          labelColor: AppColors.PRIMARY_COLOR,
+          unselectedLabelColor: AppColors.ACCENT_COLOR,
           tabs: [
             Tab(
               text: AppLocalizations.of(context).waitingTickets,

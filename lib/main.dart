@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   // Define the default brightness and colors.
-                  primaryColor: AppColors.PRIMARY_COLOR,
+                  primaryColor: AppColors.PRIMARY_DARK_COLOR,
                   unselectedWidgetColor: AppColors.PRIMARY_COLOR,
                   accentColor: AppColors.ACCENT_COLOR,
                   primaryColorDark: AppColors.PRIMARY_DARK_COLOR,

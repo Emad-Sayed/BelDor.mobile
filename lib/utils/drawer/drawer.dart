@@ -155,126 +155,136 @@ class _MyDrawerState extends State<MyDrawer> {
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
       // space to fit everything.
-      child: Column(
-        // Important: Remove any padding from the ListView.
-        children: <Widget>[
-          DrawerHeader(
-            child: _getHeader(),
-            decoration: BoxDecoration(
-              color: AppColors.PRIMARY_COLOR,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: ListView.builder(
-                padding: EdgeInsets.all(10.0),
-                itemCount: _drawerData.length,
-                itemBuilder: (context, index) {
-                  print(index);
-                  if (isLoggedIn && index == 1)
-                    return Container();
-                  else if (!isLoggedIn && index == 2)
-                    return Container();
-                  else if (!isLoggedIn && index == 3)
-                    return Container();
-                  else if (!isLoggedIn && index == 4)
-                    return Container();
-                  else
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: selectedMenuItemId == index
-                            ? AppColors.PRIMARY_DARK_COLOR
-                            : Colors.transparent,
-                      ),
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-                      child: ListTile(
-                        title: Text(
-                          _drawerData[index].drawerTitle,
-                          style: TextStyle(color: AppColors.PRIMARY_COLOR),
-                        ),
-                        leading: Icon(
-                          _drawerData[index].drawerIcon,
-                          color: AppColors.PRIMARY_COLOR,
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                          if (index == _drawerData.length - 1) {
-                            PreferenceUtils.setBool(
-                                SharedFields.IS_LOGGED_IN, false);
-                            PreferenceUtils.setString(SharedFields.TOKEN, "");
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      LoginScreen()),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      _drawerData[index].navigateTo),
-                            );
-                          }
-                        },
-                      ),
-                    );
-                },
+      child: Container(
+        color: AppColors.DRAWER_BODY_COLOR,
+        child: Column(
+          // Important: Remove any padding from the ListView.
+          children: <Widget>[
+            DrawerHeader(
+              child: _getHeader(),
+              decoration: BoxDecoration(
+                color: AppColors.PRIMARY_DARK_COLOR,
               ),
             ),
-          ),
-          Align(
-            alignment: AlignmentDirectional.bottomStart,
-            child: ListTile(
-              dense: false,
-              title: Card(
-                color: AppColors.PRIMARY_DARK_COLOR,
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: chosenLanguage,
-                    items: <String>[
-                      AppLocalizations.of(context).english,
-                      AppLocalizations.of(context).arabic
-                    ].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(color: AppColors.PRIMARY_COLOR),
-                          textAlign: TextAlign.center,
+            Expanded(
+              child: Container(
+                child: ListView.builder(
+                  padding: EdgeInsets.all(10.0),
+                  itemCount: _drawerData.length,
+                  itemBuilder: (context, index) {
+                    print(index);
+                    if (isLoggedIn && index == 1)
+                      return Container();
+                    else if (!isLoggedIn && index == 2)
+                      return Container();
+                    else if (!isLoggedIn && index == 3)
+                      return Container();
+                    else if (!isLoggedIn && index == 4)
+                      return Container();
+                    else
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          color: selectedMenuItemId == index
+                              ? AppColors.PRIMARY_DARK_COLOR
+                              : Colors.transparent,
+                        ),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 12.0, vertical: 4.0),
+                        child: ListTile(
+                          title: Text(
+                            _drawerData[index].drawerTitle,
+                            style: TextStyle(
+                                color: selectedMenuItemId == index
+                                    ? AppColors.PRIMARY_COLOR
+                                    : Colors.white),
+                          ),
+                          leading: Icon(
+                            _drawerData[index].drawerIcon,
+                            color: selectedMenuItemId == index
+                                ? AppColors.PRIMARY_COLOR
+                                : Colors.white,
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            if (index == _drawerData.length - 1) {
+                              PreferenceUtils.setBool(
+                                  SharedFields.IS_LOGGED_IN, false);
+                              PreferenceUtils.setString(SharedFields.TOKEN, "");
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        LoginScreen()),
+                              );
+                            } else {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        _drawerData[index].navigateTo),
+                              );
+                            }
+                          },
                         ),
                       );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        chosenLanguage = newValue;
-                        if (newValue == AppLocalizations.of(context).english) {
-                          PreferenceUtils.setString(
-                              SharedFields.LANGUAGE, 'en');
-                        } else if (newValue ==
-                            AppLocalizations.of(context).arabic) {
-                          PreferenceUtils.setString(
-                              SharedFields.LANGUAGE, 'ar');
-                        }
-                        MyApp.restartApp(context);
-                      });
-                    },
-                  ),
+                  },
                 ),
               ),
-              leading: Container(
-                  margin: EdgeInsets.all(8.0),
-                  child: Text(
-                    AppLocalizations.of(context).language,
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.PRIMARY_COLOR),
-                    textAlign: TextAlign.center,
-                  )),
             ),
-          )
-        ],
+            Align(
+              alignment: AlignmentDirectional.bottomStart,
+              child: ListTile(
+                dense: false,
+                contentPadding: EdgeInsets.all(16.0),
+                title: Card(
+                  elevation: 3.0,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: chosenLanguage,
+                      items: <String>[
+                        AppLocalizations.of(context).english,
+                        AppLocalizations.of(context).arabic
+                      ].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(color: AppColors.PRIMARY_COLOR),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          chosenLanguage = newValue;
+                          if (newValue ==
+                              AppLocalizations.of(context).english) {
+                            PreferenceUtils.setString(
+                                SharedFields.LANGUAGE, 'en');
+                          } else if (newValue ==
+                              AppLocalizations.of(context).arabic) {
+                            PreferenceUtils.setString(
+                                SharedFields.LANGUAGE, 'ar');
+                          }
+                          MyApp.restartApp(context);
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                leading: Container(
+                    margin: EdgeInsets.all(8.0),
+                    child: Text(
+                      AppLocalizations.of(context).language,
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.PRIMARY_COLOR),
+                      textAlign: TextAlign.center,
+                    )),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

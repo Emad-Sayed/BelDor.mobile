@@ -2,6 +2,7 @@ import 'package:bel_dor/models/ticket_details.dart';
 import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/utils/app_localization.dart';
+import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
@@ -78,27 +79,20 @@ class _TicketsHistoryState extends State<TicketsHistory> {
         mainKey: mainKey,
         showSearch: true,
       ),
-      body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            color: AppColors.CONTAINER_BG_COLOR,
-            image: DecorationImage(
-                image: AssetImage("assets/images/pattern.png"),
-                fit: BoxFit.fitHeight),
-          ),
-          child: Stack(
-            children: [
-              getTickets(),
-              SlidingUpPanel(
-                minHeight: 0.0,
-                controller: _pc,
-                renderPanelSheet: false,
-                panel: _floatingPanel(),
-                backdropEnabled: true,
-              )
-            ],
-          )),
+      body: BackgroundWidget(
+        child: Stack(
+          children: [
+            getTickets(),
+            SlidingUpPanel(
+              minHeight: 0.0,
+              controller: _pc,
+              renderPanelSheet: false,
+              panel: _floatingPanel(),
+              backdropEnabled: true,
+            )
+          ],
+        ),
+      ),
     );
   }
 
