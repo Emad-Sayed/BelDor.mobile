@@ -2,16 +2,16 @@ import 'package:bel_dor/models/branch_details.dart';
 import 'package:bel_dor/models/deparment_details.dart';
 import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
+import 'package:bel_dor/screen/ticket_added_screen.dart';
 import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
+import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
-
-import 'ticket_added_screen.dart';
 
 class BranchesScreen extends StatefulWidget {
   @override
@@ -24,8 +24,10 @@ class _BranchesScreenState extends State<BranchesScreen> {
   List<DropdownMenuItem<String>> branchesMenuItems = List();
   List<DropdownMenuItem<String>> departmentsMenuItems = List();
   List<DepartmentDetails> departments;
-  bool showLoading = false, showDepartments;
-  int selectedBranchId = 0;
+  bool showLoading = false,
+      disableDepartments = true,
+      disableSubmitButton = true;
+  int selectedBranchId = 0, selectedDepartmentId = 0;
   String selectedBranchName, selectedDepartmentName;
 
   @override
@@ -78,28 +80,55 @@ class _BranchesScreenState extends State<BranchesScreen> {
         showSearch: false,
       ),
       body: BackgroundWidget(
-        child: ListView(
-          children: [
-            buildBranchList(context),
-            showDepartments != null
-                ? Visibility(
-                    visible: showDepartments,
-                    replacement: Container(
-                      margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 4 - 100),
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              buildBranchList(context),
+              buildDepartmentList(context),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: InkWell(
+                  onTap: () {
+                    disableSubmitButton ? null : Navigator.of(context)
+                      ..pushReplacement(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                TicketAddedScreen(
+                                  departmentId: selectedDepartmentId,
+                                  branchId: selectedBranchId,
+                                )),
+                      );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: AppColors.PRIMARY_DARK_COLOR,
                     ),
-                    child: buildDepartmentList(context))
-                : Container(),
-          ],
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "Get A Ticket",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                        color: AppColors.ACCENT_COLOR,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Container buildDepartmentList(BuildContext context) {
+  Widget buildDepartmentList(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.all(16.0),
@@ -107,30 +136,30 @@ class _BranchesScreenState extends State<BranchesScreen> {
       height: 100.0,
       color: Colors.white,
       child: SearchableDropdown.single(
+        readOnly: disableDepartments,
         items: departmentsMenuItems,
         value: selectedDepartmentName,
         hint: "Choose Department",
         searchHint: "Search A Department",
+        onClear: () {
+          setState(() {
+            selectedDepartmentName = null;
+            disableSubmitButton = true;
+          });
+        },
         onChanged: (value) {
           setState(() {
             selectedDepartmentName = value;
+            if (selectedDepartmentName != null)
+              selectedDepartmentId = departments
+                  .firstWhere((department) =>
+                      (AppLocalizations.of(context).languageCode == "en"
+                          ? department.departementNameEN
+                          : department.departementNameAR) ==
+                      selectedDepartmentName)
+                  .departementId;
           });
-          Navigator.of(context)
-            ..pop()
-            ..push(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => TicketAddedScreen(
-                        departmentId: departments
-                            .firstWhere((department) =>
-                                (AppLocalizations.of(context).languageCode ==
-                                        "en"
-                                    ? department.departementNameEN
-                                    : department.departementNameAR) ==
-                                selectedDepartmentName)
-                            .departementId,
-                        branchId: selectedBranchId,
-                      )),
-            );
+          if (selectedDepartmentName != null) disableSubmitButton = false;
         },
         dialogBox: true,
         isExpanded: true,
@@ -139,7 +168,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
     );
   }
 
-  Container buildBranchList(BuildContext context) {
+  Widget buildBranchList(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.all(16.0),
@@ -154,7 +183,8 @@ class _BranchesScreenState extends State<BranchesScreen> {
         onClear: () {
           setState(() {
             selectedBranchName = null;
-            showDepartments = null;
+            disableDepartments = true;
+            disableSubmitButton = true;
           });
         },
         onChanged: (value) {
@@ -171,10 +201,6 @@ class _BranchesScreenState extends State<BranchesScreen> {
   }
 
   void getDepartments() {
-    setState(() {
-      showDepartments = false;
-    });
-    print(selectedBranchName);
     selectedBranchId = branches
         .firstWhere((branch) =>
             (AppLocalizations.of(context).languageCode == "en"
@@ -202,7 +228,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
               ),
             );
           });
-          showDepartments = true;
+          disableDepartments = false;
         });
       } else {
         mainKey.currentState.showSnackBar(SnackBar(
