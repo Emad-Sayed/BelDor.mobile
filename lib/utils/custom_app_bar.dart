@@ -2,8 +2,6 @@ import 'package:bel_dor/screen/tickets_history_filter.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-import 'app_localization.dart';
-
 class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final mainKey;
   final bool showSearch;
@@ -43,15 +41,13 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         // change this size and style
         onPressed: () => mainKey.currentState.openDrawer(),
       ),
-      title: Text(
-        AppLocalizations
-            .of(context)
-            .title,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: AppColors.ACCENT_COLOR,
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold),
+      title: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image(
+          image: AssetImage("assets/images/beldoor_logo.png"),
+          height: 60,
+          width: 150,
+        ),
       ),
       automaticallyImplyLeading: false,
       elevation: 8.0,

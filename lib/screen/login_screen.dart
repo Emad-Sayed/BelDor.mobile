@@ -3,7 +3,6 @@ import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/screen/home_page_screen.dart';
 import 'package:bel_dor/screen/signup_screen.dart';
 import 'package:bel_dor/utils/app_localization.dart';
-import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
 import 'package:bel_dor/utils/utils.dart';
@@ -45,30 +44,23 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Scaffold(
             key: mainKey,
-            body: BackgroundWidget(
+            body: Container(
+              color: AppColors.PRIMARY_DARK_COLOR,
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Image.asset(
-                              'assets/images/splash_image.png',
-                              width: 100.0,
-                              height: 100.0,
-                            ),
-                          ),
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Image.asset(
+                          'assets/images/beldoor_logo.png',
+                          height: 150.0,
                         ),
-                        Expanded(
-                            child: Image.asset('assets/images/signIn_star.png'))
-                      ],
+                      ),
                     ),
                     SizedBox(
-                      height: 16.0,
+                      height: 8.0,
                     ),
                     Text(
                       AppLocalizations.of(context).loginTitle,
@@ -308,7 +300,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
-                                color: AppColors.PRIMARY_DARK_COLOR,
+                                color: AppColors.ACCENT_COLOR,
                               ),
                               width: MediaQuery.of(context).size.width,
                               margin: EdgeInsets.symmetric(horizontal: 16.0),
@@ -318,7 +310,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0,
-                                  color: AppColors.ACCENT_COLOR,
+                                  color: AppColors.PRIMARY_DARK_COLOR,
                                 ),
                                 textAlign: TextAlign.center,
                               ),

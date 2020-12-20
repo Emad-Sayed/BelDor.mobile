@@ -88,13 +88,13 @@ class _MyHomePageState extends State<MyHomePage>
           // change this size and style
           onPressed: () => mainKey.currentState.openDrawer(),
         ),
-        title: Text(
-          AppLocalizations.of(context).title,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: AppColors.ACCENT_COLOR,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold),
+        title: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image(
+            image: AssetImage("assets/images/beldoor_logo.png"),
+            height: 60,
+            width: 150,
+          ),
         ),
         bottom: TabBar(
           physics: NeverScrollableScrollPhysics(),

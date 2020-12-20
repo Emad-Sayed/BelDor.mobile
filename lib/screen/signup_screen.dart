@@ -53,30 +53,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Scaffold(
             key: mainKey,
-            body: BackgroundWidget(
+            body: Container(
+              color: AppColors.PRIMARY_DARK_COLOR,
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Image.asset(
-                              'assets/images/splash_image.png',
-                              width: 100.0,
-                              height: 100.0,
-                            ),
-                          ),
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Image.asset(
+                          'assets/images/beldoor_logo.png',
+                          height: 150.0,
                         ),
-                        Expanded(
-                            child: Image.asset('assets/images/signIn_star.png'))
-                      ],
+                      ),
                     ),
                     SizedBox(
-                      height: 16.0,
+                      height: 8.0,
                     ),
                     Text(
                       AppLocalizations.of(context).signUpTitle,
@@ -429,7 +422,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
-                                color: AppColors.PRIMARY_DARK_COLOR,
+                                color: AppColors.ACCENT_COLOR,
                               ),
                               width: MediaQuery.of(context).size.width,
                               margin: EdgeInsets.symmetric(horizontal: 16.0),
@@ -439,7 +432,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0,
-                                  color: AppColors.ACCENT_COLOR,
+                                  color: AppColors.PRIMARY_DARK_COLOR,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
