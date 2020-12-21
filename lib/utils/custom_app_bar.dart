@@ -42,11 +42,11 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () => mainKey.currentState.openDrawer(),
       ),
       title: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Image(
           image: AssetImage("assets/images/beldoor_logo.png"),
-          height: 60,
-          width: 150,
+          height: 50,
+          width: 170,
         ),
       ),
       automaticallyImplyLeading: false,
