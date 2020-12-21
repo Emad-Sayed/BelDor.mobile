@@ -3,10 +3,12 @@ import 'package:bel_dor/models/deparment_details.dart';
 import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/screen/ticket_added_screen.dart';
-import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
+import 'package:bel_dor/utils/resources/LayoutUtils.dart';
+import 'package:bel_dor/utils/resources/app_strings.dart';
+import 'package:bel_dor/utils/resources/refresh_screen.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class BranchesScreen extends StatefulWidget {
   _BranchesScreenState createState() => _BranchesScreenState();
 }
 
-class _BranchesScreenState extends State<BranchesScreen> {
+class _BranchesScreenState extends State<BranchesScreen> implements RefreshScreen {
   final mainKey = GlobalKey<ScaffoldState>();
   List<BranchDetails> branches = List();
   List<DropdownMenuItem<String>> branchesMenuItems = List();
@@ -46,12 +48,9 @@ class _BranchesScreenState extends State<BranchesScreen> {
           branches.forEach((branch) {
             branchesMenuItems.add(
               DropdownMenuItem(
-                child: Text(AppLocalizations.of(context).languageCode == "en"
-                    ? branch.nameEN
-                    : branch.nameAR),
-                value: AppLocalizations.of(context).languageCode == "en"
-                    ? branch.nameEN
-                    : branch.nameAR,
+                child:
+                    Text(AppStrings.isEnglish ? branch.nameEN : branch.nameAR),
+                value: AppStrings.isEnglish ? branch.nameEN : branch.nameAR,
               ),
             );
           });
@@ -72,56 +71,58 @@ class _BranchesScreenState extends State<BranchesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: mainKey,
-      drawer: MyDrawer(2),
-      appBar: MyCustomAppBar(
-        mainKey: mainKey,
-        showSearch: false,
-      ),
-      body: BackgroundWidget(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              buildBranchList(context),
-              buildDepartmentList(context),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: InkWell(
-                  onTap: () {
-                    disableSubmitButton ? null : Navigator.of(context)
-                      ..pushReplacement(
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                TicketAddedScreen(
-                                  departmentId: selectedDepartmentId,
-                                  branchId: selectedBranchId,
-                                )),
-                      );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: AppColors.PRIMARY_DARK_COLOR,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 16.0),
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      "Get A Ticket",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                        color: AppColors.ACCENT_COLOR,
+    return LayoutUtils.wrapWithtinLayoutDirection(
+      child: Scaffold(
+        key: mainKey,
+        drawer: MyDrawer(2, this),
+        appBar: MyCustomAppBar(
+          mainKey: mainKey,
+          showSearch: false,
+        ),
+        body: BackgroundWidget(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                buildBranchList(context),
+                buildDepartmentList(context),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: InkWell(
+                    onTap: () {
+                      disableSubmitButton ? null : Navigator.of(context)
+                        ..pushReplacement(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  TicketAddedScreen(
+                                    departmentId: selectedDepartmentId,
+                                    branchId: selectedBranchId,
+                                  )),
+                        );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: AppColors.PRIMARY_DARK_COLOR,
                       ),
-                      textAlign: TextAlign.center,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        "Get A Ticket",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                          color: AppColors.ACCENT_COLOR,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -153,7 +154,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
             if (selectedDepartmentName != null)
               selectedDepartmentId = departments
                   .firstWhere((department) =>
-                      (AppLocalizations.of(context).languageCode == "en"
+                      (AppStrings.isEnglish
                           ? department.departementNameEN
                           : department.departementNameAR) ==
                       selectedDepartmentName)
@@ -203,9 +204,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
   void getDepartments() {
     selectedBranchId = branches
         .firstWhere((branch) =>
-            (AppLocalizations.of(context).languageCode == "en"
-                ? branch.nameEN
-                : branch.nameAR) ==
+            (AppStrings.isEnglish ? branch.nameEN : branch.nameAR) ==
             selectedBranchName)
         .id;
     NetworkClient()
@@ -219,10 +218,10 @@ class _BranchesScreenState extends State<BranchesScreen> {
           departments.forEach((department) {
             departmentsMenuItems.add(
               DropdownMenuItem(
-                child: Text(AppLocalizations.of(context).languageCode == "en"
+                child: Text(AppStrings.isEnglish
                     ? department.departementNameEN
                     : department.departementNameAR),
-                value: AppLocalizations.of(context).languageCode == "en"
+                value: AppStrings.isEnglish
                     ? department.departementNameEN
                     : department.departementNameAR,
               ),
@@ -239,6 +238,13 @@ class _BranchesScreenState extends State<BranchesScreen> {
           duration: Duration(seconds: 3),
         ));
       }
+    });
+  }
+
+  @override
+  void loadPage() {
+    setState(() {
+
     });
   }
 }

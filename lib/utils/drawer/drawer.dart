@@ -1,34 +1,35 @@
 import 'dart:ui';
 
-import 'package:bel_dor/main.dart';
 import 'package:bel_dor/screen/branches_screen.dart';
 import 'package:bel_dor/screen/home_page_screen.dart';
 import 'package:bel_dor/screen/login_screen.dart';
 import 'package:bel_dor/screen/tickets_history_filter.dart';
+import 'package:bel_dor/utils/resources/app_strings.dart';
+import 'package:bel_dor/utils/resources/refresh_screen.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
-import '../app_localization.dart';
 import '../preference_utils.dart';
 import '../shared_fields.dart';
 import 'drawer_model.dart';
 
 class MyDrawer extends StatefulWidget {
   final int drawerIndex;
+  final RefreshScreen refreshScreen;
 
-  MyDrawer(this.drawerIndex);
+  MyDrawer(this.drawerIndex, this.refreshScreen);
 
   @override
   _MyDrawerState createState() => _MyDrawerState(drawerIndex);
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  String chosenCountry;
   String chosenLanguage;
   int selectedMenuItemId;
   final int drawerIndex;
@@ -37,21 +38,8 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   void initState() {
-    setState(() {
-      chosenCountry = PreferenceUtils.getString(SharedFields.COUNTRY, "");
-    });
     selectedMenuItemId = drawerIndex;
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (AppLocalizations.of(context).languageCode == "en")
-      chosenLanguage = AppLocalizations.of(context).english;
-    else if (AppLocalizations.of(context).languageCode == "ar")
-      chosenLanguage = AppLocalizations.of(context).arabic;
-
-    super.didChangeDependencies();
   }
 
   Widget _getHeader() {
@@ -88,9 +76,7 @@ class _MyDrawerState extends State<MyDrawer> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
                 child: Text(
-                  user != null
-                      ? user['Name']
-                      : AppLocalizations.of(context).welcome,
+                  user != null ? user['Name'] : AppStrings.welcome,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16.0,
@@ -102,7 +88,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 child: Row(
                   children: [
                     Text(
-                      AppLocalizations.of(context).yourCode,
+                      AppStrings.yourCode,
                       style: TextStyle(
                           fontSize: 16.0, color: AppColors.ACCENT_COLOR),
                     ),
@@ -130,23 +116,23 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     final List<DrawerModel> _drawerData = [
       DrawerModel(
-          drawerTitle: AppLocalizations.of(context).home,
+          drawerTitle: AppStrings.home,
           drawerIcon: Icons.home,
           navigateTo: MyHomePage()),
       DrawerModel(
-          drawerTitle: AppLocalizations.of(context).login,
+          drawerTitle: AppStrings.login,
           drawerIcon: Icons.chevron_right,
           navigateTo: LoginScreen()),
       DrawerModel(
-          drawerTitle: AppLocalizations.of(context).branches,
+          drawerTitle: AppStrings.branches,
           drawerIcon: Icons.category,
           navigateTo: BranchesScreen()),
       DrawerModel(
-          drawerTitle: AppLocalizations.of(context).ticketsHistory,
+          drawerTitle: AppStrings.ticketsHistory,
           drawerIcon: Icons.history,
           navigateTo: TicketsHistoryFilter()),
       DrawerModel(
-          drawerTitle: AppLocalizations.of(context).logout,
+          drawerTitle: AppStrings.logout,
           drawerIcon: Icons.chevron_left,
           navigateTo: null),
     ];
@@ -231,56 +217,54 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
             ),
             Align(
-              alignment: AlignmentDirectional.bottomStart,
-              child: ListTile(
-                dense: false,
-                contentPadding: EdgeInsets.all(16.0),
-                title: Card(
-                  elevation: 3.0,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: chosenLanguage,
-                      items: <String>[
-                        AppLocalizations.of(context).english,
-                        AppLocalizations.of(context).arabic
-                      ].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(color: AppColors.PRIMARY_COLOR),
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          chosenLanguage = newValue;
-                          if (newValue ==
-                              AppLocalizations.of(context).english) {
-                            PreferenceUtils.setString(
-                                SharedFields.LANGUAGE, 'en');
-                          } else if (newValue ==
-                              AppLocalizations.of(context).arabic) {
-                            PreferenceUtils.setString(
-                                SharedFields.LANGUAGE, 'ar');
-                          }
-                          MyApp.restartApp(context);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                leading: Container(
-                    margin: EdgeInsets.all(8.0),
-                    child: Text(
-                      AppLocalizations.of(context).language,
+              alignment: AlignmentDirectional.bottomCenter,
+              child: Container(
+                margin: EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      AppStrings.language,
                       style: TextStyle(
-                          fontSize: 16.0,
+                          fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                           color: AppColors.PRIMARY_COLOR),
                       textAlign: TextAlign.center,
-                    )),
+                    ),
+                    SizedBox(
+                      width: 8.0,
+                    ),
+                    Center(
+                      child: FlutterSwitch(
+                        width: MediaQuery.of(context).size.width / 3,
+                        height: 45,
+                        activeTextColor: AppColors.PRIMARY_DARK_COLOR,
+                        activeToggleColor: AppColors.PRIMARY_DARK_COLOR,
+                        activeColor: AppColors.ACCENT_COLOR,
+                        inactiveColor: AppColors.ACCENT_COLOR,
+                        inactiveTextColor: AppColors.PRIMARY_DARK_COLOR,
+                        inactiveToggleColor: Colors.grey,
+                        valueFontSize: 20.0,
+                        activeTextFontWeight: FontWeight.bold,
+                        inactiveTextFontWeight: FontWeight.bold,
+                        showOnOff: true,
+                        toggleSize: 30.0,
+                        value: AppStrings.isEnglish,
+                        activeText: AppStrings.english,
+                        inactiveText: AppStrings.arabic,
+                        borderRadius: 30.0,
+                        padding: 8,
+                        onToggle: (value) {
+                          setState(() {
+                            AppStrings.setLanguage(value);
+                          });
+                          widget.refreshScreen.loadPage();
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           ],
@@ -289,3 +273,37 @@ class _MyDrawerState extends State<MyDrawer> {
     );
   }
 }
+
+// Card(
+// elevation: 3.0,
+// child: DropdownButtonHideUnderline(
+// child: DropdownButton<String>(
+// value: chosenLanguage,
+// items: <String>[AppStrings.english, AppStrings.arabic]
+// .map((String value) {
+// return DropdownMenuItem<String>(
+// value: value,
+// child: Text(
+// value,
+// style: TextStyle(color: AppColors.PRIMARY_COLOR),
+// textAlign: TextAlign.center,
+// ),
+// );
+// }).toList(),
+// onChanged: (newValue) {
+// setState(() {
+// // chosenLanguage = newValue;
+// if (newValue == AppStrings.english) {
+// AppStrings.setLanguage(true);
+// chosenLanguage = AppStrings.english;
+// } else if (newValue == AppStrings.arabic) {
+// AppStrings.setLanguage(false);
+// chosenLanguage = AppStrings.arabic;
+// }
+// });
+// widget.refreshScreen.loadPage();
+// Navigator.pop(context);
+// },
+// ),
+// ),
+// ),

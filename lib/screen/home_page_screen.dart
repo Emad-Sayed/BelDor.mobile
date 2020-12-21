@@ -2,10 +2,12 @@ import 'package:bel_dor/models/ticket_details.dart';
 import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
 import 'package:bel_dor/screen/branches_screen.dart';
-import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
+import 'package:bel_dor/utils/resources/LayoutUtils.dart';
+import 'package:bel_dor/utils/resources/app_strings.dart';
+import 'package:bel_dor/utils/resources/refresh_screen.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +24,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin implements RefreshScreen{
   final mainKey = GlobalKey<ScaffoldState>();
   List<TicketDetails> tickets;
   List<TicketDetails> closedTickets;
@@ -74,76 +76,78 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: mainKey,
-      drawer: MyDrawer(0),
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            size: 40,
-            color: AppColors.ACCENT_COLOR,
-          ),
-          // change this size and style
-          onPressed: () => mainKey.currentState.openDrawer(),
-        ),
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image(
-            image: AssetImage("assets/images/beldoor_logo.png"),
-            height: 60,
-            width: 150,
-          ),
-        ),
-        bottom: TabBar(
-          physics: NeverScrollableScrollPhysics(),
-          controller: _tabController,
-          indicatorColor: AppColors.PRIMARY_COLOR,
-          labelColor: AppColors.PRIMARY_COLOR,
-          unselectedLabelColor: AppColors.ACCENT_COLOR,
-          tabs: [
-            Tab(
-              text: AppLocalizations.of(context).waitingTickets,
+    return LayoutUtils.wrapWithtinLayoutDirection(
+      child: Scaffold(
+        key: mainKey,
+        drawer: MyDrawer(0, this),
+        appBar: AppBar(
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.menu,
+              size: 40,
+              color: AppColors.ACCENT_COLOR,
             ),
-            Tab(
-              text: AppLocalizations.of(context).closedTickets,
+            // change this size and style
+            onPressed: () => mainKey.currentState.openDrawer(),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image(
+              image: AssetImage("assets/images/beldoor_logo.png"),
+              height: 60,
+              width: 150,
             ),
-            Tab(
-              text: AppLocalizations.of(context).missedTickets,
-            )
-          ],
+          ),
+          bottom: TabBar(
+            physics: NeverScrollableScrollPhysics(),
+            controller: _tabController,
+            indicatorColor: AppColors.PRIMARY_COLOR,
+            labelColor: AppColors.PRIMARY_COLOR,
+            unselectedLabelColor: AppColors.ACCENT_COLOR,
+            tabs: [
+              Tab(
+                text: AppStrings.waitingTickets,
+              ),
+              Tab(
+                text: AppStrings.closedTickets,
+              ),
+              Tab(
+                text: AppStrings.missedTickets,
+              )
+            ],
+          ),
+          automaticallyImplyLeading: false,
+          elevation: 8.0,
         ),
-        automaticallyImplyLeading: false,
-        elevation: 8.0,
-      ),
-      body: BackgroundWidget(
-        child: TabBarView(
+        body: BackgroundWidget(
+          child: TabBarView(
 //          physics: NeverScrollableScrollPhysics(),
-          controller: _tabController,
-          children: [
-            getWaitingTickets(),
-            getClosedTickets(),
-            getMissedTickets()
-          ],
+            controller: _tabController,
+            children: [
+              getWaitingTickets(),
+              getClosedTickets(),
+              getMissedTickets()
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => BranchesScreen()),
-          );
-        },
-        label: Text(
-          AppLocalizations.of(context).generateTicket,
-          style: TextStyle(fontSize: 16.0, color: AppColors.PRIMARY_COLOR),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (BuildContext context) => BranchesScreen()),
+            );
+          },
+          label: Text(
+            AppStrings.generateTicket,
+            style: TextStyle(fontSize: 16.0, color: AppColors.PRIMARY_COLOR),
+          ),
+          icon: Icon(
+            Icons.add,
+            color: AppColors.PRIMARY_COLOR,
+          ),
+          backgroundColor: AppColors.PRIMARY_DARK_COLOR,
         ),
-        icon: Icon(
-          Icons.add,
-          color: AppColors.PRIMARY_COLOR,
-        ),
-        backgroundColor: AppColors.PRIMARY_DARK_COLOR,
       ),
     );
   }
@@ -197,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context).branch,
+                                      AppStrings.branch,
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: AppColors.PRIMARY_DARK_COLOR),
@@ -207,9 +211,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     ),
                                     Expanded(
                                       child: Text(
-                                        AppLocalizations.of(context)
-                                                    .languageCode ==
-                                                'en'
+                                        AppStrings.isEnglish
                                             ? waitingTickets[index].branchNameEN
                                             : waitingTickets[index]
                                                 .branchNameAR,
@@ -229,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context).department,
+                                      AppStrings.department,
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: AppColors.PRIMARY_DARK_COLOR),
@@ -239,9 +241,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     ),
                                     Expanded(
                                       child: Text(
-                                        AppLocalizations.of(context)
-                                                    .languageCode ==
-                                                'en'
+                                        AppStrings.isEnglish
                                             ? waitingTickets[index]
                                                 .departementNameEN
                                             : waitingTickets[index]
@@ -262,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context).ticketState,
+                                      AppStrings.ticketState,
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: AppColors.PRIMARY_DARK_COLOR),
@@ -271,9 +271,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       width: 5.0,
                                     ),
                                     Text(
-                                      AppLocalizations.of(context)
-                                                  .languageCode ==
-                                              'en'
+                                      AppStrings.isEnglish
                                           ? waitingTickets[index].statusNameEN
                                           : waitingTickets[index].statusNameAR,
                                       style: TextStyle(
@@ -289,8 +287,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context)
-                                          .currentNumber,
+                                      AppStrings.currentNumber,
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: AppColors.PRIMARY_DARK_COLOR),
@@ -335,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage>
                 })
             : Center(
                 child: Text(
-                  AppLocalizations.of(context).noWaitingTickets,
+                  AppStrings.noWaitingTickets,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -441,7 +438,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       Row(
                                         children: [
                                           Text(
-                                            AppLocalizations.of(context).branch,
+                                            AppStrings.branch,
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 color: AppColors
@@ -452,9 +449,7 @@ class _MyHomePageState extends State<MyHomePage>
                                           ),
                                           Expanded(
                                             child: Text(
-                                              AppLocalizations.of(context)
-                                                          .languageCode ==
-                                                      'en'
+                                              AppStrings.isEnglish
                                                   ? closedTickets[index]
                                                       .branchNameEN
                                                   : closedTickets[index]
@@ -475,8 +470,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       Row(
                                         children: [
                                           Text(
-                                            AppLocalizations.of(context)
-                                                .department,
+                                            AppStrings.department,
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 color: AppColors
@@ -487,10 +481,7 @@ class _MyHomePageState extends State<MyHomePage>
                                           ),
                                           Expanded(
                                             child: Text(
-                                              AppLocalizations.of(
-                                                              context)
-                                                          .languageCode ==
-                                                      'en'
+                                              AppStrings.isEnglish
                                                   ? closedTickets[index]
                                                       .departementNameEN
                                                   : closedTickets[index]
@@ -511,8 +502,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       Row(
                                         children: [
                                           Text(
-                                            AppLocalizations.of(context)
-                                                .ticketState,
+                                            AppStrings.ticketState,
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 color: AppColors
@@ -522,9 +512,7 @@ class _MyHomePageState extends State<MyHomePage>
                                             width: 5.0,
                                           ),
                                           Text(
-                                            AppLocalizations.of(context)
-                                                        .languageCode ==
-                                                    'en'
+                                            AppStrings.isEnglish
                                                 ? closedTickets[index]
                                                     .statusNameEN
                                                 : closedTickets[index]
@@ -543,8 +531,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       Row(
                                         children: [
                                           Text(
-                                            AppLocalizations.of(context)
-                                                .currentNumber,
+                                            AppStrings.currentNumber,
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 color: AppColors
@@ -602,7 +589,7 @@ class _MyHomePageState extends State<MyHomePage>
               )
             : Center(
                 child: Text(
-                  AppLocalizations.of(context).noClosedTickets,
+                  AppStrings.noClosedTickets,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -708,7 +695,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       Row(
                                         children: [
                                           Text(
-                                            AppLocalizations.of(context).branch,
+                                            AppStrings.branch,
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 color: AppColors
@@ -719,9 +706,7 @@ class _MyHomePageState extends State<MyHomePage>
                                           ),
                                           Expanded(
                                             child: Text(
-                                              AppLocalizations.of(context)
-                                                          .languageCode ==
-                                                      'en'
+                                              AppStrings.isEnglish
                                                   ? missedTickets[index]
                                                       .branchNameEN
                                                   : missedTickets[index]
@@ -742,8 +727,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       Row(
                                         children: [
                                           Text(
-                                            AppLocalizations.of(context)
-                                                .department,
+                                            AppStrings.department,
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 color: AppColors
@@ -754,10 +738,7 @@ class _MyHomePageState extends State<MyHomePage>
                                           ),
                                           Expanded(
                                             child: Text(
-                                              AppLocalizations.of(
-                                                              context)
-                                                          .languageCode ==
-                                                      'en'
+                                              AppStrings.isEnglish
                                                   ? missedTickets[index]
                                                       .departementNameEN
                                                   : missedTickets[index]
@@ -778,8 +759,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       Row(
                                         children: [
                                           Text(
-                                            AppLocalizations.of(context)
-                                                .ticketState,
+                                            AppStrings.ticketState,
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 color: AppColors
@@ -789,9 +769,7 @@ class _MyHomePageState extends State<MyHomePage>
                                             width: 5.0,
                                           ),
                                           Text(
-                                            AppLocalizations.of(context)
-                                                        .languageCode ==
-                                                    'en'
+                                            AppStrings.isEnglish
                                                 ? missedTickets[index]
                                                     .statusNameEN
                                                 : missedTickets[index]
@@ -810,8 +788,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       Row(
                                         children: [
                                           Text(
-                                            AppLocalizations.of(context)
-                                                .currentNumber,
+                                            AppStrings.currentNumber,
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 color: AppColors
@@ -869,7 +846,7 @@ class _MyHomePageState extends State<MyHomePage>
               )
             : Center(
                 child: Text(
-                  AppLocalizations.of(context).noMissedTickets,
+                  AppStrings.noMissedTickets,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -1004,13 +981,19 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   String updateDateFormat(String date) {
-    var formatter = DateFormat.yMMMEd(
-            AppLocalizations.of(context).languageCode == 'en' ? 'en' : 'ar')
-        .add_jm();
+    var formatter =
+        DateFormat.yMMMEd(AppStrings.isEnglish ? 'en' : 'ar').add_jm();
     print(formatter.locale);
     String formatted = formatter.format(DateTime.parse(date));
     print(DateTime.parse(date).timeZoneName);
     print(formatted);
     return formatted;
+  }
+
+  @override
+  void loadPage() {
+    setState(() {
+
+    });
   }
 }

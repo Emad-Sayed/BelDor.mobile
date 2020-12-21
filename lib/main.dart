@@ -1,13 +1,12 @@
 import 'package:bel_dor/screen/splash_screen.dart';
 import 'package:bel_dor/utils/background_widget.dart';
+import 'package:bel_dor/utils/resources/en_strings.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'utils/app_localization.dart';
 import 'utils/preference_utils.dart';
-import 'utils/shared_fields.dart';
 
 void main() {
   runApp(MyApp());
@@ -41,17 +40,18 @@ class _MyAppState extends State<MyApp> {
           return KeyedSubtree(
               key: key,
               child: MaterialApp(
-                locale: Locale(
-                    PreferenceUtils.getString(SharedFields.LANGUAGE, "en")),
                 debugShowCheckedModeBanner: false,
                 onGenerateTitle: (BuildContext context) =>
-                    AppLocalizations.of(context).title,
+                    EngStrings.TITLE,
                 localizationsDelegates: [
-                  AppLocalizations.delegate,
+                  // AppLocalizations.delegate,
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
                 ],
-                supportedLocales: AppLocalizations.delegate.supportedLocales,
+                supportedLocales: [
+                  const Locale('en', ''),
+                  const Locale('ar', ''),
+                ],
                 theme: ThemeData(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   // Define the default brightness and colors.

@@ -1,0 +1,3 @@
+class RefreshScreen {
+  void loadPage() {}
+}

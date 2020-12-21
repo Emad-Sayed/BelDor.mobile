@@ -1,11 +1,13 @@
 import 'package:bel_dor/models/ticket_details.dart';
 import 'package:bel_dor/networking/network_client.dart';
 import 'package:bel_dor/networking/result.dart';
-import 'package:bel_dor/utils/app_localization.dart';
 import 'package:bel_dor/utils/background_widget.dart';
 import 'package:bel_dor/utils/custom_app_bar.dart';
 import 'package:bel_dor/utils/drawer/drawer.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
+import 'package:bel_dor/utils/resources/LayoutUtils.dart';
+import 'package:bel_dor/utils/resources/app_strings.dart';
+import 'package:bel_dor/utils/resources/refresh_screen.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,7 +32,8 @@ class TicketsHistory extends StatefulWidget {
   _TicketsHistoryState createState() => _TicketsHistoryState();
 }
 
-class _TicketsHistoryState extends State<TicketsHistory> {
+class _TicketsHistoryState extends State<TicketsHistory>
+    implements RefreshScreen {
   final mainKey = GlobalKey<ScaffoldState>();
   List<TicketDetails> tickets;
   final PanelController _pc = new PanelController();
@@ -72,25 +75,27 @@ class _TicketsHistoryState extends State<TicketsHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: mainKey,
-      drawer: MyDrawer(3),
-      appBar: MyCustomAppBar(
-        mainKey: mainKey,
-        showSearch: true,
-      ),
-      body: BackgroundWidget(
-        child: Stack(
-          children: [
-            getTickets(),
-            SlidingUpPanel(
-              minHeight: 0.0,
-              controller: _pc,
-              renderPanelSheet: false,
-              panel: _floatingPanel(),
-              backdropEnabled: true,
-            )
-          ],
+    return LayoutUtils.wrapWithtinLayoutDirection(
+      child: Scaffold(
+        key: mainKey,
+        drawer: MyDrawer(3, this),
+        appBar: MyCustomAppBar(
+          mainKey: mainKey,
+          showSearch: true,
+        ),
+        body: BackgroundWidget(
+          child: Stack(
+            children: [
+              getTickets(),
+              SlidingUpPanel(
+                minHeight: 0.0,
+                controller: _pc,
+                renderPanelSheet: false,
+                panel: _floatingPanel(),
+                backdropEnabled: true,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -183,7 +188,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                 Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context).branch,
+                                      AppStrings.branch,
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: AppColors.PRIMARY_DARK_COLOR),
@@ -193,9 +198,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        AppLocalizations.of(context)
-                                                    .languageCode ==
-                                                'en'
+                                        AppStrings.isEnglish
                                             ? tickets[index].branchNameEN
                                             : tickets[index].branchNameAR,
                                         style: TextStyle(
@@ -214,7 +217,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                 Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context).department,
+                                      AppStrings.department,
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: AppColors.PRIMARY_DARK_COLOR),
@@ -224,9 +227,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        AppLocalizations.of(context)
-                                                    .languageCode ==
-                                                'en'
+                                        AppStrings.isEnglish
                                             ? tickets[index].departementNameEN
                                             : tickets[index].departementNameAR,
                                         softWrap: true,
@@ -245,7 +246,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                 Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context).ticketState,
+                                      AppStrings.ticketState,
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: AppColors.PRIMARY_DARK_COLOR),
@@ -254,9 +255,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                                       width: 5.0,
                                     ),
                                     Text(
-                                      AppLocalizations.of(context)
-                                                  .languageCode ==
-                                              'en'
+                                      AppStrings.isEnglish
                                           ? tickets[index].statusNameEN
                                           : tickets[index].statusNameAR,
                                       style: TextStyle(
@@ -291,7 +290,7 @@ class _TicketsHistoryState extends State<TicketsHistory> {
                 })
             : Center(
                 child: Text(
-                  AppLocalizations.of(context).noHistoryTickets,
+                  AppStrings.noHistoryTickets,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -426,13 +425,17 @@ class _TicketsHistoryState extends State<TicketsHistory> {
   }
 
   String updateDateFormat(String date) {
-    var formatter = DateFormat.yMMMEd(
-            AppLocalizations.of(context).languageCode == 'en' ? 'en' : 'ar')
-        .add_jm();
+    var formatter =
+        DateFormat.yMMMEd(AppStrings.isEnglish ? 'en' : 'ar').add_jm();
     print(formatter.locale);
     String formatted = formatter.format(DateTime.parse(date));
     print(DateTime.parse(date).timeZoneName);
     print(formatted);
     return formatted;
+  }
+
+  @override
+  void loadPage() {
+    setState(() {});
   }
 }

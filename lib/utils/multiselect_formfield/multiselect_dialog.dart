@@ -1,6 +1,6 @@
+import 'package:bel_dor/utils/resources/app_strings.dart';
 import 'package:flutter/material.dart';
 
-import '../app_localization.dart';
 
 class MultiSelectDialogItem<V> {
   const MultiSelectDialogItem(this.value, this.label);
@@ -97,7 +97,7 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
                 title: new TextField(
                   controller: controller,
                   decoration: new InputDecoration(
-                      hintText: AppLocalizations.of(context).search,
+                      hintText: AppStrings.search,
                       border: InputBorder.none),
                   onChanged: onSearchTextChanged,
                 ),

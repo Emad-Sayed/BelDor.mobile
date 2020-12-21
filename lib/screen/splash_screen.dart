@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bel_dor/screen/home_page_screen.dart';
 import 'package:bel_dor/screen/login_screen.dart';
 import 'package:bel_dor/utils/preference_utils.dart';
+import 'package:bel_dor/utils/resources/LayoutUtils.dart';
+import 'package:bel_dor/utils/resources/app_strings.dart';
 import 'package:bel_dor/utils/shared_fields.dart';
 import 'package:bel_dor/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    AppStrings.initiateLanguage();
     Timer(
       Duration(seconds: 5),
       () => Navigator.of(context).pushReplacement(
@@ -32,14 +35,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        alignment: Alignment.center,
-        color: AppColors.PRIMARY_DARK_COLOR,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Image(
-            image: AssetImage("assets/images/beldoor_logo.png"),
+    return LayoutUtils.wrapWithtinLayoutDirection(
+      child: SafeArea(
+        child: Container(
+          alignment: Alignment.center,
+          color: AppColors.PRIMARY_DARK_COLOR,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Image(
+              image: AssetImage("assets/images/beldoor_logo.png"),
+            ),
           ),
         ),
       ),
