@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -24,7 +25,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin implements RefreshScreen{
+    with SingleTickerProviderStateMixin
+    implements RefreshScreen {
   final mainKey = GlobalKey<ScaffoldState>();
   List<TicketDetails> tickets;
   List<TicketDetails> closedTickets;
@@ -155,181 +157,7 @@ class _MyHomePageState extends State<MyHomePage>
   getWaitingTickets() {
     return waitingTickets != null
         ? waitingTickets.isNotEmpty
-            ? ListView.builder(
-                itemCount: waitingTickets.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 3.0,
-                    color: AppColors.ACCENT_COLOR,
-                    margin:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 80,
-                            height: 60,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SvgPicture.asset('assets/images/ticket.svg'),
-                                Text(
-                                  waitingTickets[index].ticketNumber.toString(),
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18.0),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          child: VerticalDivider(
-                            thickness: 1,
-                            color: Colors.black,
-                          ),
-                          height: 50,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppStrings.branch,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: AppColors.PRIMARY_DARK_COLOR),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        AppStrings.isEnglish
-                                            ? waitingTickets[index].branchNameEN
-                                            : waitingTickets[index]
-                                                .branchNameAR,
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                AppColors.PRIMARY_DARK_COLOR),
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppStrings.department,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: AppColors.PRIMARY_DARK_COLOR),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        AppStrings.isEnglish
-                                            ? waitingTickets[index]
-                                                .departementNameEN
-                                            : waitingTickets[index]
-                                                .departementNameAR,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                AppColors.PRIMARY_DARK_COLOR),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppStrings.ticketState,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: AppColors.PRIMARY_DARK_COLOR),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Text(
-                                      AppStrings.isEnglish
-                                          ? waitingTickets[index].statusNameEN
-                                          : waitingTickets[index].statusNameAR,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.PRIMARY_DARK_COLOR),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppStrings.currentNumber,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: AppColors.PRIMARY_DARK_COLOR),
-                                    ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Text(
-                                      waitingTickets[index]
-                                          .currentNumber
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.PRIMARY_DARK_COLOR),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: Text(
-                                    updateDateFormat(
-                                        waitingTickets[index].createTime),
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColors.PRIMARY_DARK_COLOR),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                })
+            ? buildTicketsList(waitingTickets, true)
             : Center(
                 child: Text(
                   AppStrings.noWaitingTickets,
@@ -350,234 +178,7 @@ class _MyHomePageState extends State<MyHomePage>
         ? closedTickets.isNotEmpty
             ? Stack(
                 children: [
-                  ListView.builder(
-                      itemCount: closedTickets.length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 3.0,
-                          color: AppColors.ACCENT_COLOR,
-                          margin: EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 16.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: 80,
-                                  height: 60,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                          'assets/images/ticket.svg'),
-                                      Text(
-                                        closedTickets[index]
-                                            .ticketNumber
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18.0),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                child: VerticalDivider(
-                                  thickness: 1,
-                                  color: Colors.black,
-                                ),
-                                height: 50,
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Align(
-                                        alignment: AlignmentDirectional.topEnd,
-                                        child: InkWell(
-                                          onTap: () {
-                                            _pc.open();
-                                            NetworkClient()
-                                                .getClosedTicketInfo(
-                                                    ticketId: tickets[index].id)
-                                                .then((result) {
-                                              if (result is SuccessState) {
-                                                setState(() {
-                                                  singleTicket =
-                                                      result.value.data;
-                                                });
-                                              } else {
-                                                mainKey.currentState
-                                                    .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                    (result as ErrorState)
-                                                        .msg
-                                                        .message,
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            'Helvetica'),
-                                                  ),
-                                                  duration:
-                                                      Duration(seconds: 3),
-                                                ));
-                                              }
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Icon(Icons.info_outline),
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            AppStrings.branch,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              AppStrings.isEnglish
-                                                  ? closedTickets[index]
-                                                      .branchNameEN
-                                                  : closedTickets[index]
-                                                      .branchNameAR,
-                                              style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors
-                                                      .PRIMARY_DARK_COLOR),
-                                              softWrap: true,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            AppStrings.department,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              AppStrings.isEnglish
-                                                  ? closedTickets[index]
-                                                      .departementNameEN
-                                                  : closedTickets[index]
-                                                      .departementNameAR,
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors
-                                                      .PRIMARY_DARK_COLOR),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            AppStrings.ticketState,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Text(
-                                            AppStrings.isEnglish
-                                                ? closedTickets[index]
-                                                    .statusNameEN
-                                                : closedTickets[index]
-                                                    .statusNameAR,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            AppStrings.currentNumber,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Text(
-                                            closedTickets[index]
-                                                .currentNumber
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional.centerEnd,
-                                        child: Text(
-                                          updateDateFormat(
-                                              closedTickets[index].createTime),
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              color:
-                                                  AppColors.PRIMARY_DARK_COLOR),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      }),
+                  buildTicketsList(closedTickets, false),
                   SlidingUpPanel(
                     minHeight: 0.0,
                     controller: _pc,
@@ -607,234 +208,7 @@ class _MyHomePageState extends State<MyHomePage>
         ? missedTickets.isNotEmpty
             ? Stack(
                 children: [
-                  ListView.builder(
-                      itemCount: missedTickets.length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 3.0,
-                          color: AppColors.ACCENT_COLOR,
-                          margin: EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 16.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: 80,
-                                  height: 60,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                          'assets/images/ticket.svg'),
-                                      Text(
-                                        missedTickets[index]
-                                            .ticketNumber
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18.0),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                child: VerticalDivider(
-                                  thickness: 1,
-                                  color: Colors.black,
-                                ),
-                                height: 50,
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Align(
-                                        alignment: AlignmentDirectional.topEnd,
-                                        child: InkWell(
-                                          onTap: () {
-                                            _pc.open();
-                                            NetworkClient()
-                                                .getClosedTicketInfo(
-                                                    ticketId: tickets[index].id)
-                                                .then((result) {
-                                              if (result is SuccessState) {
-                                                setState(() {
-                                                  singleTicket =
-                                                      result.value.data;
-                                                });
-                                              } else {
-                                                mainKey.currentState
-                                                    .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                    (result as ErrorState)
-                                                        .msg
-                                                        .message,
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            'Helvetica'),
-                                                  ),
-                                                  duration:
-                                                      Duration(seconds: 3),
-                                                ));
-                                              }
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Icon(Icons.info_outline),
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            AppStrings.branch,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              AppStrings.isEnglish
-                                                  ? missedTickets[index]
-                                                      .branchNameEN
-                                                  : missedTickets[index]
-                                                      .branchNameAR,
-                                              style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors
-                                                      .PRIMARY_DARK_COLOR),
-                                              softWrap: true,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            AppStrings.department,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              AppStrings.isEnglish
-                                                  ? missedTickets[index]
-                                                      .departementNameEN
-                                                  : missedTickets[index]
-                                                      .departementNameAR,
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors
-                                                      .PRIMARY_DARK_COLOR),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            AppStrings.ticketState,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Text(
-                                            AppStrings.isEnglish
-                                                ? missedTickets[index]
-                                                    .statusNameEN
-                                                : missedTickets[index]
-                                                    .statusNameAR,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            AppStrings.currentNumber,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Text(
-                                            missedTickets[index]
-                                                .currentNumber
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors
-                                                    .PRIMARY_DARK_COLOR),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional.centerEnd,
-                                        child: Text(
-                                          updateDateFormat(
-                                              missedTickets[index].createTime),
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              color:
-                                                  AppColors.PRIMARY_DARK_COLOR),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      }),
+                  buildTicketsList(missedTickets, false),
                   SlidingUpPanel(
                     minHeight: 0.0,
                     controller: _pc,
@@ -990,10 +364,231 @@ class _MyHomePageState extends State<MyHomePage>
     return formatted;
   }
 
+  Widget buildTicketsList(List<TicketDetails> items, bool isWaiting) {
+    return AnimationLimiter(
+      child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          itemCount: items.length,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(seconds: 1),
+              child: SlideAnimation(
+                verticalOffset: 100.0,
+                child: ScaleAnimation(
+                  child: Card(
+                    elevation: 3.0,
+                    color: AppColors.ACCENT_COLOR,
+                    margin:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 80,
+                            height: 60,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SvgPicture.asset('assets/images/ticket.svg'),
+                                Text(
+                                  items[index].ticketNumber.toString(),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18.0),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          child: VerticalDivider(
+                            thickness: 1,
+                            color: Colors.black,
+                          ),
+                          height: 50,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                isWaiting
+                                    ? Container()
+                                    : Align(
+                                        alignment: AlignmentDirectional.topEnd,
+                                        child: InkWell(
+                                          onTap: () {
+                                            _pc.open();
+                                            NetworkClient()
+                                                .getClosedTicketInfo(
+                                                    ticketId: tickets[index].id)
+                                                .then((result) {
+                                              if (result is SuccessState) {
+                                                setState(() {
+                                                  singleTicket =
+                                                      result.value.data;
+                                                });
+                                              } else {
+                                                mainKey.currentState
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                    (result as ErrorState)
+                                                        .msg
+                                                        .message,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'Helvetica'),
+                                                  ),
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ));
+                                              }
+                                            });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(Icons.info_outline),
+                                          ),
+                                        ),
+                                      ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      AppStrings.branch,
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          color: AppColors.PRIMARY_DARK_COLOR),
+                                    ),
+                                    SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        AppStrings.isEnglish
+                                            ? items[index].branchNameEN
+                                            : items[index].branchNameAR,
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                AppColors.PRIMARY_DARK_COLOR),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      AppStrings.department,
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          color: AppColors.PRIMARY_DARK_COLOR),
+                                    ),
+                                    SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        AppStrings.isEnglish
+                                            ? items[index].departementNameEN
+                                            : items[index].departementNameAR,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                AppColors.PRIMARY_DARK_COLOR),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      AppStrings.ticketState,
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          color: AppColors.PRIMARY_DARK_COLOR),
+                                    ),
+                                    SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    Text(
+                                      AppStrings.isEnglish
+                                          ? items[index].statusNameEN
+                                          : items[index].statusNameAR,
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.PRIMARY_DARK_COLOR),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      AppStrings.currentNumber,
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          color: AppColors.PRIMARY_DARK_COLOR),
+                                    ),
+                                    SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    Text(
+                                      items[index].currentNumber.toString(),
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.PRIMARY_DARK_COLOR),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Align(
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  child: Text(
+                                    updateDateFormat(items[index].createTime),
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColors.PRIMARY_DARK_COLOR),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+    );
+  }
+
   @override
   void loadPage() {
-    setState(() {
-
-    });
+    setState(() {});
   }
 }
