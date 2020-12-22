@@ -97,8 +97,8 @@ class _MyHomePageState extends State<MyHomePage>
             padding: const EdgeInsets.all(8.0),
             child: Image(
               image: AssetImage("assets/images/beldoor_logo.png"),
-              height: 60,
-              width: 150,
+              height: 50,
+              width: 170,
             ),
           ),
           bottom: TabBar(
